@@ -19,8 +19,6 @@ public class MainActivity extends AppCompatActivity {
         final NotificationManager notificationManager = (NotificationManager) MainActivity.this.getSystemService(NOTIFICATION_SERVICE);
         final Intent intent = new Intent(this, MainActivity.class);
 
-//        Intent testIntent = new Intent(this, MainActivity.class);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
