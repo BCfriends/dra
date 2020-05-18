@@ -18,6 +18,7 @@ public class NotificationImpl {
     public void createNotificationChannel(String channel_id, String channel_name, String channel_description) {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
+        //TODO : 1
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(channel_id, channel_name, importance);
