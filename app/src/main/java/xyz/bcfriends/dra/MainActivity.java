@@ -1,10 +1,7 @@
 package xyz.bcfriends.dra;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,26 +9,18 @@ import android.os.Bundle;
 import androidx.core.app.NotificationCompat;
 
 public class MainActivity extends AppCompatActivity {
-    final String CHANNEL_ID = "TEST";
+    final String CHANNEL_ID = "main";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final NotificationManager notificationManager = (NotificationManager) MainActivity.this.getSystemService(NOTIFICATION_SERVICE);
-        final Intent intent = new Intent(this, MainActivity.class);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        CharSequence name = getString(R.string.channel_name);
-        String description = getString(R.string.channel_description);
-        int importance = NotificationManager.IMPORTANCE_DEFAULT;
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-        channel.setDescription(description);
-        // Register the channel with the system; you can't change the importance
-        // or other notification behaviors after this
-        notificationManager.createNotificationChannel(channel);
-
+        final NotificationImpl noti = new NotificationImpl(this);
+        noti.createNotificationChannel(CHANNEL_ID, "알림 채널", "테스트용 알림 채널");
         Button btn = findViewById(R.id.push_btn);
+        final Intent intent = new Intent(this, MainActivity.class);
+
         /* TODO:
             - 알림을 클릭하면 팝업화면이 나와서 버튼을 클릭할 수 있게 하기
         */
@@ -50,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true);
 
-                notificationManager.notify(1, builder.build());
+                noti.notify("test", builder.build());
             }
         });
     }
