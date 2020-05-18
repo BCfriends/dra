@@ -21,9 +21,6 @@ public class MainActivity extends AppCompatActivity {
         Button btn = findViewById(R.id.push_btn);
         final Intent intent = new Intent(this, MainActivity.class);
 
-        /* TODO:
-            - 알림을 클릭하면 팝업화면이 나와서 버튼을 클릭할 수 있게 하기
-        */
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
