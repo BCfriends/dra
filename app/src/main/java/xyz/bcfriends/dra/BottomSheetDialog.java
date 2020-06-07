@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import com.applandeo.materialcalendarview.EventDay;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -37,8 +36,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.bottom_sheet, container, false);
 
         Button insertBtn = view.findViewById(R.id.bsInsertBtn);
-        DataBaseHelper dbh = DataBaseHelper.getInstance(requireActivity());
-        FirestoreManager FM = new FirestoreManager();
+//        DataBaseHelper dbh = DataBaseHelper.getInstance(requireActivity());
 
         insertBtn.setOnClickListener(v -> {
             RadioGroup rg = view.findViewById(R.id.fellingRadioGroup);
@@ -53,15 +51,16 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                     .ofInstant(eventDay.getCalendar().toInstant(), eventDay.getCalendar().getTimeZone().toZoneId())
                     .toLocalDate();
 
-            FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            if (mAuth.getCurrentUser() == null) {
+            FirestoreHelper helper = new FirestoreHelper();
+            if (!helper.IsUserExist()) {
                 Toast.makeText(requireActivity(), "먼저 로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
+                return;
             }
 
             Map<String, Object> data = new HashMap<>();
             data.put("depressStatus", idx + 1);
 
-            FM.writeData(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), data);
+            helper.writeData(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), data);
             dismiss();
         });
 

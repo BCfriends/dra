@@ -10,14 +10,11 @@ import android.util.Log;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import xyz.bcfriends.dra.util.AlarmPresenter;
@@ -87,15 +84,14 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 alertDialog.show();
                 break;
             case "db_test":
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                if (mAuth.getCurrentUser() == null) {
+                FirestoreHelper helper = new FirestoreHelper();
+                if (!helper.IsUserExist()) {
                     Toast.makeText(requireActivity(), "먼저 로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
                     return true;
                 }
-                FirestoreManager manager = new FirestoreManager();
                 Map<String, Object> data = new HashMap<>();
                 data.put("depressStatus", 5);
-                manager.writeData(null, data);
+                helper.writeData(null, data);
                 Toast.makeText(requireActivity(), "작업을 실행했습니다.", Toast.LENGTH_SHORT).show();
                 break;
             case "get_firebase_id":

@@ -15,18 +15,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class FirestoreManager {
-    private static final String TAG = "FirestoreManager";
+public class FirestoreHelper {
+    private static final String TAG = "FirestoreHelper";
 
     private final FirebaseAuth mAuth;
     private final FirebaseUser mUser;
     private final FirebaseFirestore mDatabase;
 
-    public FirestoreManager() {
+    public FirestoreHelper() {
         this.mAuth = FirebaseAuth.getInstance();
         this.mUser = mAuth.getCurrentUser();
         this.mDatabase = FirebaseFirestore.getInstance();
@@ -87,6 +86,10 @@ public class FirestoreManager {
                         Log.w(TAG, "Error writing document", e);
                     }
                 });
+    }
+
+    boolean IsUserExist() {
+        return mAuth.getCurrentUser() != null;
     }
 
 }

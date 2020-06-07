@@ -12,9 +12,9 @@ import java.util.Map;
 public class DailyAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        final FirestoreManager manager = new FirestoreManager();
+        final FirestoreHelper helper = new FirestoreHelper();
 
-        manager.readData(null, new FirestoreManager.DBQueryCallback() {
+        helper.readData(null, new FirestoreHelper.DBQueryCallback() {
             @Override
             public void onCallback(boolean exists, @Nullable Map<String, Object> data) {
                 if (!exists) {
