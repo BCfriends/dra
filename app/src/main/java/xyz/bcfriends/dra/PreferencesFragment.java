@@ -24,7 +24,9 @@ import xyz.bcfriends.dra.util.AlarmPresenter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class PreferencesFragment extends PreferenceFragmentCompat {
     private static final String TAG = "PreferencesFragment";
@@ -91,7 +93,9 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                     return true;
                 }
                 FirestoreManager manager = new FirestoreManager();
-                manager.testWriteData();
+                Map<String, Object> data = new HashMap<>();
+                data.put("depressStatus", 5);
+                manager.writeData(null, data);
                 Toast.makeText(requireActivity(), "작업을 실행했습니다.", Toast.LENGTH_SHORT).show();
                 break;
             case "get_firebase_id":

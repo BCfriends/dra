@@ -15,6 +15,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment {
 
@@ -55,7 +58,11 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                 Toast.makeText(requireActivity(), "먼저 로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
             }
 
-            FM.FSWriteData(idx + 1);
+            Map<String, Object> data = new HashMap<>();
+            data.put("depressStatus", idx + 1);
+
+            FM.writeData(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), data);
+            dismiss();
         });
 
         return view;
