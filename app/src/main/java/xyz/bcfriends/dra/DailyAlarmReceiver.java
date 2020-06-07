@@ -6,18 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-
-import java.util.Map;
+import com.google.firebase.firestore.DocumentSnapshot;
+import xyz.bcfriends.dra.util.DBHelper;
 
 public class DailyAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         final FirestoreHelper helper = new FirestoreHelper();
-
-        helper.readData(null, new FirestoreHelper.DBQueryCallback() {
+        helper.readData(DBHelper.DEFAULT, new DBHelper.QueryCallback() {
             @Override
-            public void onCallback(boolean exists, @Nullable Map<String, Object> data) {
-                if (!exists) {
+            public void onCallback(@Nullable DocumentSnapshot data) {
+                if (!(data != null && data.exists())) {
                     execute(context, intent);
                 }
             }

@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import xyz.bcfriends.dra.util.AlarmPresenter;
+import xyz.bcfriends.dra.util.DBHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -91,7 +92,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 }
                 Map<String, Object> data = new HashMap<>();
                 data.put("depressStatus", 5);
-                helper.writeData(null, data);
+                helper.writeData(DBHelper.DEFAULT, data);
                 Toast.makeText(requireActivity(), "작업을 실행했습니다.", Toast.LENGTH_SHORT).show();
                 break;
             case "get_firebase_id":
