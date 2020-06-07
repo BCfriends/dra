@@ -1,64 +1,116 @@
 package xyz.bcfriends.dra;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AnalyticsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class AnalyticsFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+import java.util.ArrayList;
+
+public class AnalyticsFragment extends Fragment {
+
+    BarChart mpBarChart;
 
     public AnalyticsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AnalyticsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static AnalyticsFragment newInstance(String param1, String param2) {
-        AnalyticsFragment fragment = new AnalyticsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+        return new AnalyticsFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        TextView textView = new TextView(getActivity());
-        textView.setText(R.string.hello_blank_fragment);
-        return textView;
+
+        View v = inflater.inflate(R.layout.graph_stat, container, false);
+
+//        setContentView(R.layout.graph_stat);
+        mpBarChart = v.findViewById(R.id.barchart);
+
+        int[][] in = new int[12][5];
+        in[0] = new int[]{4, 5, 6, 7, 8};
+        in[1] = new int[]{10, 4, 2, 6, 8};
+        in[2] = new int[]{10, 4, 2, 6, 8};
+
+        ArrayList<ArrayList<BarEntry>> barEntries = some(in);
+
+        BarDataSet barDataSet1 = new BarDataSet(barEntries.get(0),"우울함");
+        barDataSet1.setColor(Color.RED);
+
+        BarDataSet barDataSet2 = new BarDataSet(barEntries.get(1),"슬픔");
+        barDataSet2.setColor(Color.BLUE);
+
+        BarDataSet barDataSet3 = new BarDataSet(barEntries.get(2),"보통");
+        barDataSet3.setColor(Color.MAGENTA);
+
+        BarDataSet barDataSet4 = new BarDataSet(barEntries.get(3),"좋음");
+        barDataSet4.setColor(Color.GRAY);
+
+        BarDataSet barDataSet5 = new BarDataSet(barEntries.get(4),"아주 좋음");
+        barDataSet5.setColor(Color.GREEN);
+
+        BarData data = new BarData(barDataSet1, barDataSet2, barDataSet3, barDataSet4, barDataSet5);
+        mpBarChart.setData(data);
+
+        String[] days = new String[] {"1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"};
+        XAxis xAxis = mpBarChart.getXAxis();
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(days));
+        xAxis.setCenterAxisLabels(true);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1);
+        xAxis.setGranularityEnabled(true);
+
+        mpBarChart.setDragEnabled(true);
+        mpBarChart.setVisibleXRangeMaximum(6);
+
+        float barSpace = 0.1f;
+        float groupSpace = 0.05f;
+        data.setBarWidth(0.09f);
+
+        mpBarChart.getXAxis().setAxisMinimum(0);
+        mpBarChart.getXAxis().setAxisMaximum(0 + mpBarChart.getBarData().getGroupWidth(groupSpace, barSpace) * 12);
+//        mpBarChart.getAxisLeft().setAxisMinimum(0);
+
+        mpBarChart.groupBars(0,groupSpace,barSpace);
+
+        mpBarChart.invalidate();
+
+        return v;
+    }
+
+    //    [4,5,6,7,8], [10,4,2,6,8]
+    private ArrayList<ArrayList<BarEntry>> some(int[][] in) {
+        ArrayList<ArrayList<BarEntry>> result = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++) {
+            result.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < 12; i++){
+            for (int j = 0; j < 5; j++) {
+                result.get(j).add(new BarEntry(i, in[i][j]));
+            }
+        }
+
+        return result;
     }
 }
