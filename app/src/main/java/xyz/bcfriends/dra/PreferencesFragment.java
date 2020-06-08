@@ -17,7 +17,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import xyz.bcfriends.dra.util.AlarmPresenter;
 import xyz.bcfriends.dra.util.DBHelper;
 
 import java.text.SimpleDateFormat;
@@ -43,7 +42,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat implements DBH
         final Intent alarmIntent = new Intent(requireActivity(), DailyAlarmReceiver.class);
         final PendingIntent pendingIntent = PendingIntent.getBroadcast(requireActivity(), 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        final AlarmPresenter presenter = new AlarmPresenter(requireActivity(), prefs, pendingIntent);
+        final DailyAlarmPresenter presenter = new DailyAlarmPresenter(requireActivity(), prefs, pendingIntent);
 
         switch (preference.getKey()) {
             case "google_login":
