@@ -8,7 +8,8 @@ import xyz.bcfriends.dra.R;
 public class DepressStatusUtil {
 
     public static int getDepressDrawObj(int depressStatus) {
-        return getDepressDrawObj(String.valueOf(depressStatus));
+        int result = getDepressDrawObj(String.valueOf(depressStatus));
+        return result;
     }
 
     public static int getDepressDrawObj(String depressStatus) {

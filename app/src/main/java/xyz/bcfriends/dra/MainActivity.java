@@ -78,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 break;
+            case R.id.add_device:
+                Intent intent = new Intent(this, WebViewActivity.class);
+                startActivity(intent);
+                break;
             default:
                 break;
         }
