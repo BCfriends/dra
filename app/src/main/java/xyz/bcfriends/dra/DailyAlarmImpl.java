@@ -1,4 +1,4 @@
-package xyz.bcfriends.dra.util;
+package xyz.bcfriends.dra;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -9,16 +9,17 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import xyz.bcfriends.dra.util.Alarm;
 
 import java.util.Calendar;
 import java.util.Objects;
 
-public class AlarmImpl implements Alarm {
+public class DailyAlarmImpl implements Alarm {
     private final Context mContext;
     private final SharedPreferences prefs;
     private final AlarmManager alarmManager;
 
-    AlarmImpl(Context mContext, SharedPreferences prefs) {
+    DailyAlarmImpl(Context mContext, SharedPreferences prefs) {
         this.mContext = mContext;
         this.prefs = prefs;
         this.alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
@@ -71,13 +72,14 @@ public class AlarmImpl implements Alarm {
         }
 
         Calendar cal = Calendar.getInstance();
+        Calendar origCal = (Calendar) cal.clone();
 
         int hourOfDay = prefs.getInt("hourOfDay", -1);
         int minute = prefs.getInt("minute", -1);
         cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
         cal.set(Calendar.MINUTE, minute);
 
-        if (cal.before(Calendar.getInstance())) {
+        if (cal.before(origCal)) {
             cal.add(Calendar.DATE, 1);
         }
 

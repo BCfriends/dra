@@ -1,26 +1,28 @@
-package xyz.bcfriends.dra.util;
+package xyz.bcfriends.dra;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
+import xyz.bcfriends.dra.util.Alarm;
+import xyz.bcfriends.dra.util.DeviceBootReceiver;
 
 import java.util.Calendar;
 
-public class AlarmPresenter implements Alarm.Presenter {
-    private final AlarmImpl alarm;
+public class DailyAlarmPresenter implements Alarm.Presenter {
+    private final DailyAlarmImpl alarm;
     private final PendingIntent pendingIntent;
     private final Class<? extends BroadcastReceiver> receiver;
 
-    public AlarmPresenter(Context mContext, SharedPreferences prefs, @NonNull PendingIntent pendingIntent) {
+    public DailyAlarmPresenter(Context mContext, SharedPreferences prefs, @NonNull PendingIntent pendingIntent) {
         this(mContext, prefs, pendingIntent, DeviceBootReceiver.class);
     }
 
-    public AlarmPresenter(Context mContext, SharedPreferences prefs, @NonNull PendingIntent pendingIntent, @NonNull Class<? extends BroadcastReceiver> receiver) {
+    public DailyAlarmPresenter(Context mContext, SharedPreferences prefs, @NonNull PendingIntent pendingIntent, @NonNull Class<? extends BroadcastReceiver> receiver) {
         this.receiver = receiver;
         this.pendingIntent = pendingIntent;
-        this.alarm = new AlarmImpl(mContext, prefs);
+        this.alarm = new DailyAlarmImpl(mContext, prefs);
     }
 
     public void scheduleAlarm() {
