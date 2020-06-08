@@ -1,5 +1,6 @@
 package xyz.bcfriends.dra;
 
+import android.app.FragmentTransaction;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -9,8 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentResultListener;
+
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
@@ -31,6 +36,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 import xyz.bcfriends.dra.util.DBHelper;
+import xyz.bcfriends.dra.util.DepressStatusUtil;
 
 
 public class HomeFragment extends Fragment {
@@ -87,25 +93,7 @@ public class HomeFragment extends Fragment {
 
                                     depressStatus = String.valueOf(document.getData().get("depressStatus"));
 
-                                    switch (depressStatus) {
-                                        case DepressStatus.BAD:
-                                            drawable = R.drawable.bs_checkbox_feeling_bad;
-                                            break;
-                                        case DepressStatus.SAD:
-                                            drawable = R.drawable.bs_checkbox_feeling_sad;
-                                            break;
-                                        case DepressStatus.NORMAL:
-                                            drawable = R.drawable.bs_checkbox_feeling_normal;
-                                            break;
-                                        case DepressStatus.GOOD:
-                                            drawable = R.drawable.bs_checkbox_feeling_good;
-                                            break;
-                                        case DepressStatus.NICE:
-                                            drawable = R.drawable.bs_checkbox_feeling_nice;
-                                            break;
-                                        default:
-                                            throw new IllegalStateException("Unexpected value: " + depressStatus);
-                                    }
+                                    drawable = DepressStatusUtil.getDepressDrawObj(depressStatus);
 
                                     da = getResources().getDrawable(drawable, null);
                                     da.setTint(Color.BLUE);
@@ -120,7 +108,6 @@ public class HomeFragment extends Fragment {
                         }
                     }
             );
-
 
             calendarView.setOnDayClickListener(eventDay -> {
                 BottomSheetDialog bottomSheetDialog = BottomSheetDialog.getInstance(eventDay);
