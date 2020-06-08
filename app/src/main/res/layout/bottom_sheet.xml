@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/bottom_sheet"
+    android:tag="bottom_sheet"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#5C5C5C"
+    android:orientation="horizontal"
+
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="90dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="이날의 상태"
+            android:textColor="#FFF"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="#4A4A4A"
+            android:gravity="center"
+            android:padding="20dp">
+
+            <RadioGroup
+                android:id="@+id/fellingRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@drawable/bs_checkbox_feeling_bad"
+                    android:scaleX="1.7"
+                    android:scaleY="1.7"
+                    android:translationX="35dp"
+                    android:translationY="8dp"/>
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@drawable/bs_checkbox_feeling_sad"
+                    android:scaleX="1.7"
+                    android:scaleY="1.7"
+                    android:translationX="35dp"
+                    android:translationY="8dp" />
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@drawable/bs_checkbox_feeling_normal"
+                    android:scaleX="1.7"
+                    android:scaleY="1.7"
+                    android:translationX="35dp"
+                    android:translationY="8dp" />
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@drawable/bs_checkbox_feeling_good"
+                    android:scaleX="1.7"
+                    android:scaleY="1.7"
+                    android:translationX="35dp"
+                    android:translationY="8dp" />
+                <RadioButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:button="@drawable/bs_checkbox_feeling_nice"
+                    android:scaleX="1.7"
+                    android:scaleY="1.7"
+                    android:translationX="35dp"
+                    android:translationY="8dp" />
+            </RadioGroup>
+        </LinearLayout>
+        <Button
+            android:id="@+id/bsInsertBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:text="등록" />
+    </LinearLayout>
+</LinearLayout>

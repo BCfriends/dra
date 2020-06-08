@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="계정 연동">
+        <Preference
+            android:title="Google 계정 연결 관리"
+            android:summary="Google 계정에 로그인하여 캘린더를 동기화할 수 있습니다."
+            android:key="google_login" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="정기 알림">
         <SwitchPreference
             android:key="alarm_daily"
@@ -25,12 +31,18 @@
             />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="기타">
+    <PreferenceCategory android:title="Debug">
         <Preference
             android:key="app_info"
-            android:title="앱 정보" />
+            android:title="Show App Information" />
+        <Preference
+            android:key="db_test"
+            android:title="Test Data Insertion into Cloud Firestore" />
+        <Preference
+            android:key="get_firebase_id"
+            android:title="Get Firebase Instance ID" />
         <Preference
             android:key="debug"
-            android:title="Debug" />
+            android:title="Start TestActivity" />
     </PreferenceCategory>
 </PreferenceScreen>

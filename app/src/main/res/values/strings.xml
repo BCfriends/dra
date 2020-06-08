@@ -2,12 +2,72 @@
     <string name="app_name">dra</string>
     <string name="channel_name">알림 채널</string>
     <string name="channel_description">테스트용 알림 채널</string>
+    <string name="action_find_device">기기 찾기</string>
     <string name="apply">Apply</string>
+
     <string name="DGone">1</string>
     <string name="DGtwo">2</string>
     <string name="DGthree">3</string>
     <string name="DGfour">4</string>
+
     <string name="hello_world">Hello World! :3</string>
-    <string name="options">옵션</string>
+    <string name="feeling_bad">Feeling_Bad</string>
+    <string name="feeling_sad">Feeling_Sad</string>
+    <string name="feeling_normal">Feeling_Normal</string>
+    <string name="feeling_good">Feeling_Good</string>
+    <string name="feeling_nice">Feeling_Nice</string>
+
+    <!-- NavBar -->
+    <string name="nav_header_desc">Navigation Header</string>
+    <string name="nav_header_title">DRA</string>
+    <string name="nav_header_subtitle">Something</string>
+
+    <string name="menu_stat">통계</string>
+    <string name="menu_share">공유하기</string>
+    <string name="more">더보기</string>
+    <string name="content_description_more">더보기</string>
+
+    <string name="open">열기</string>
+    <string name="close">닫기</string>
+
+    <!-- Material Calendar 한글화 -->
+    <string name="material_calendar_monday">월</string>
+    <string name="material_calendar_tuesday">화</string>
+    <string name="material_calendar_wednesday">수</string>
+    <string name="material_calendar_thursday">목</string>
+    <string name="material_calendar_friday">금</string>
+    <string name="material_calendar_saturday">토</string>
+    <string name="material_calendar_sunday">일</string>
+
+    <array name="material_calendar_months_array">
+        <item>1월</item>
+        <item>2월</item>
+        <item>3월</item>
+        <item>4월</item>
+        <item>5월</item>
+        <item>6월</item>
+        <item>7월</item>
+        <item>8월</item>
+        <item>9월</item>
+        <item>10월</item>
+        <item>11월</item>
+        <item>12월</item>
+    </array>
+
+    <string name="material_calendar_today_button">오늘</string>
+    <string name="material_calendar_positive_button">확인</string>
+    <string name="material_calendar_negative_button">취소</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="debug_message">This is a debug activity</string>
+    <string name="menu_home">홈</string>
+    <string name="menu_settings">설정</string>
+
+    <string name="firebase_status_fmt">Firebase User: %s</string>
+    <string name="firebase_user_management">Firebase User Management</string>
+
+    <string name="google_status_fmt">Google User: %s</string>
+    <string name="google_title_text">Google Sign In</string>
+
+    <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
 </resources>

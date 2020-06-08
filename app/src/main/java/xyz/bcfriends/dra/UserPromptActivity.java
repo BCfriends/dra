@@ -1,8 +1,8 @@
 package xyz.bcfriends.dra;
 
+import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 
 import java.util.Objects;
 
@@ -13,7 +13,7 @@ public class UserPromptActivity extends AppCompatActivity implements UserPromptD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_prompt);
 
-        Objects.requireNonNull(getSupportActionBar()).hide();
+//        Objects.requireNonNull(getSupportActionBar()).hide();
         UserPromptDialog dialog = new UserPromptDialog();
         dialog.show(getSupportFragmentManager(), "exampleBottomSheet");
     }

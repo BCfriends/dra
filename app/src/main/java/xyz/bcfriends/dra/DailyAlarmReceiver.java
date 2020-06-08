@@ -4,11 +4,26 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import com.google.firebase.firestore.DocumentSnapshot;
+import xyz.bcfriends.dra.util.DBHelper;
 
 public class DailyAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        final FirestoreHelper helper = new FirestoreHelper();
+        helper.readData(DBHelper.DEFAULT, new DBHelper.QueryCallback() {
+            @Override
+            public void onCallback(@Nullable DocumentSnapshot data) {
+                if (!(data != null && data.exists())) {
+                    execute(context, intent);
+                }
+            }
+        });
+    }
+
+    private void execute(Context context, Intent intent) {
         final String CHANNEL_ID = "alarm_receiver";
 
         final NotificationImpl noti = new NotificationImpl(context);
