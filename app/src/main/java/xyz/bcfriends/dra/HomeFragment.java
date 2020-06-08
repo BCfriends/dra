@@ -29,7 +29,6 @@ public class HomeFragment extends Fragment implements DBHelper.Executor {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,13 +45,7 @@ public class HomeFragment extends Fragment implements DBHelper.Executor {
             LocalDate ld = LocalDate.now();
 
             ld.with(TemporalAdjusters.firstDayOfMonth());
-
-            String date;
-            String datetime;
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-
+            
             calendarView.setDate(calendar);
 
             helper.readDataAll(
