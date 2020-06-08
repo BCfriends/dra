@@ -116,6 +116,7 @@ public class HomeFragment extends Fragment {
                             Log.d("Date Debug", String.valueOf(events.size()));
 
                             calendarView.setEvents(events);
+                            requireActivity().findViewById(R.id.progressBar).setVisibility(View.GONE);
                         }
                     }
             );
