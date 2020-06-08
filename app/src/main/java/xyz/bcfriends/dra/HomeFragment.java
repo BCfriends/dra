@@ -86,21 +86,21 @@ public class HomeFragment extends Fragment implements DBHelper.Executor {
                             Log.d("Date Debug", String.valueOf(events.size()));
 
                             calendarView.setEvents(events);
+                            v.findViewById(R.id.progressBar).setVisibility(View.GONE);
                         }
                     }
             );
 
         } catch (OutOfDateRangeException e) {
             e.printStackTrace();
-        } catch (UnsupportedOperationException ignored) {
-
+        } catch (UnsupportedOperationException e) {
+            v.findViewById(R.id.progressBar).setVisibility(View.GONE);
         } finally {
             calendarView.setOnDayClickListener(eventDay -> {
                 BottomSheetDialog bottomSheetDialog = BottomSheetDialog.getInstance(eventDay);
 
                 bottomSheetDialog.show(requireActivity().getSupportFragmentManager(), "bottomSheet");
             });
-            v.findViewById(R.id.progressBar).setVisibility(View.GONE);
         }
 
         return v;
