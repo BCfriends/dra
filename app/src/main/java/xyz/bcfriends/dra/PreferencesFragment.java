@@ -65,7 +65,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
                 minute = cal.get(Calendar.MINUTE);
 
-                TimePickerDialog dialog = new TimePickerDialog(requireActivity(), new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog dialog = new TimePickerDialog(requireActivity(), android.R.style.Theme_Material_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         Calendar cal = Calendar.getInstance();

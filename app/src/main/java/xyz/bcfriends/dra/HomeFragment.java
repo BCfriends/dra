@@ -8,10 +8,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -20,6 +28,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+
+import xyz.bcfriends.dra.util.DBHelper;
 
 
 public class HomeFragment extends Fragment {
@@ -35,71 +46,80 @@ public class HomeFragment extends Fragment {
         View v = inflater.inflate(R.layout.calendar, container, false);
 
         Calendar calendar = Calendar.getInstance();
-
         CalendarView calendarView = v.findViewById(R.id.calendarView);
 
         List<EventDay> events = new ArrayList<>();
 
+        FirestoreHelper firestoreHelper = new FirestoreHelper();
+        FirebaseFirestore FDB = FirebaseFirestore.getInstance();
+        FirebaseAuth userId = FirebaseAuth.getInstance();
+
         try {
-            DataBaseHelper dbh = DataBaseHelper.getInstance(requireActivity());
-
             LocalDate ld = LocalDate.now();
-
-            Cursor res = dbh.getData(ld.with(TemporalAdjusters.firstDayOfMonth()), ld.with(TemporalAdjusters.lastDayOfMonth()));
 
             ld.with(TemporalAdjusters.firstDayOfMonth());
 
             String date;
             String datetime;
-            int depressStatus;
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             SimpleDateFormat datetimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
             calendarView.setDate(calendar);
 
-//          Add Event
-            while (res.moveToNext()) {
-                Drawable da;
-                int drawable;
-                date = res.getString(res.getColumnIndex("date"));
-                datetime = res.getString(res.getColumnIndex("datetime"));
-                depressStatus = res.getInt(res.getColumnIndex("depressStatus"));
+            firestoreHelper.readDataAll(
+                    FDB.collection("users")
+                            .document(Objects.requireNonNull(userId.getUid()))
+                            .collection("Records"),
 
-                Log.d("Date Debug", date);
+                    new DBHelper.QueryCallback() {
+                        @Override
+                        public void onCallback(@Nullable QuerySnapshot data) {
+                            Drawable da;
+                            int drawable;
 
-                LocalDate dbLD = LocalDate.parse(date);
+                            String depressStatus;
 
-                calendar.set(dbLD.getYear(), dbLD.getMonthValue() - 1, dbLD.getDayOfMonth());
+                            if (data != null) {
+                                for (QueryDocumentSnapshot document : data) {
+                                    LocalDate dbLD = LocalDate.parse(document.getId());
+                                    calendar.set(dbLD.getYear(), dbLD.getMonthValue() - 1, dbLD.getDayOfMonth());
 
-                switch (depressStatus) {
-                    case DepressStatus.BAD:
-                        drawable = R.drawable.bs_checkbox_feeling_bad;
-                        break;
-                    case DepressStatus.SAD:
-                        drawable = R.drawable.bs_checkbox_feeling_sad;
-                        break;
-                    case DepressStatus.NORMAL:
-                        drawable = R.drawable.bs_checkbox_feeling_normal;
-                        break;
-                    case DepressStatus.GOOD:
-                        drawable = R.drawable.bs_checkbox_feeling_good;
-                        break;
-                    case DepressStatus.NICE:
-                        drawable = R.drawable.bs_checkbox_feeling_nice;
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + depressStatus);
-                }
-                da = getResources().getDrawable(drawable, null);
-                da.setTint(Color.BLUE);
+                                    depressStatus = String.valueOf(document.getData().get("depressStatus"));
 
-                events.add(new EventDay((Calendar) calendar.clone(), da));
-            }
+                                    switch (depressStatus) {
+                                        case DepressStatus.BAD:
+                                            drawable = R.drawable.bs_checkbox_feeling_bad;
+                                            break;
+                                        case DepressStatus.SAD:
+                                            drawable = R.drawable.bs_checkbox_feeling_sad;
+                                            break;
+                                        case DepressStatus.NORMAL:
+                                            drawable = R.drawable.bs_checkbox_feeling_normal;
+                                            break;
+                                        case DepressStatus.GOOD:
+                                            drawable = R.drawable.bs_checkbox_feeling_good;
+                                            break;
+                                        case DepressStatus.NICE:
+                                            drawable = R.drawable.bs_checkbox_feeling_nice;
+                                            break;
+                                        default:
+                                            throw new IllegalStateException("Unexpected value: " + depressStatus);
+                                    }
 
-            Log.d("Date Debug", String.valueOf(events.size()));
+                                    da = getResources().getDrawable(drawable, null);
+                                    da.setTint(Color.BLUE);
 
-            calendarView.setEvents(events);
+                                    events.add(new EventDay((Calendar) calendar.clone(), da));
+                                }
+                            }
+                            Log.d("Date Debug", String.valueOf(events.size()));
+
+                            calendarView.setEvents(events);
+                        }
+                    }
+            );
+
 
             calendarView.setOnDayClickListener(eventDay -> {
                 BottomSheetDialog bottomSheetDialog = BottomSheetDialog.getInstance(eventDay);
