@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class PreferencesFragment extends PreferenceFragmentCompat {
+public class PreferencesFragment extends PreferenceFragmentCompat implements DBHelper.Executor {
     private static final String TAG = "PreferencesFragment";
     SharedPreferences prefs;
 
@@ -85,15 +85,15 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
                 alertDialog.show();
                 break;
             case "db_test":
-                FirestoreHelper helper = new FirestoreHelper();
-                if (!helper.IsUserExist()) {
-                    Toast.makeText(requireActivity(), "먼저 로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-                    return true;
+                try {
+                    FirestoreHelper helper = new FirestoreHelper(this);
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("depressStatus", 5);
+                    helper.writeData(DBHelper.DEFAULT, data);
+                    Toast.makeText(requireActivity(), "작업을 실행했습니다.", Toast.LENGTH_SHORT).show();
+                } catch (UnsupportedOperationException ignored) {
+
                 }
-                Map<String, Object> data = new HashMap<>();
-                data.put("depressStatus", 5);
-                helper.writeData(DBHelper.DEFAULT, data);
-                Toast.makeText(requireActivity(), "작업을 실행했습니다.", Toast.LENGTH_SHORT).show();
                 break;
             case "get_firebase_id":
                 FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -130,5 +130,10 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     public void showAlarmMessage(Calendar scheduleTime) {
         String nextNotifyDate = new SimpleDateFormat("yyyy년 MM월 dd일 a hh시 mm분", Locale.getDefault()).format(scheduleTime.getTime());
         Toast.makeText(requireActivity(), nextNotifyDate + "으로 알림이 설정되었습니다.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showResult(String message) {
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }

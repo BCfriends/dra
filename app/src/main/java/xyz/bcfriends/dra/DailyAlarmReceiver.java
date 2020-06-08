@@ -9,18 +9,22 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.firestore.DocumentSnapshot;
 import xyz.bcfriends.dra.util.DBHelper;
 
-public class DailyAlarmReceiver extends BroadcastReceiver {
+public class DailyAlarmReceiver extends BroadcastReceiver implements DBHelper.Executor {
     @Override
     public void onReceive(Context context, Intent intent) {
-        final FirestoreHelper helper = new FirestoreHelper();
-        helper.readData(DBHelper.DEFAULT, new DBHelper.QueryCallback() {
-            @Override
-            public void onCallback(@Nullable DocumentSnapshot data) {
-                if (!(data != null && data.exists())) {
-                    execute(context, intent);
+        try {
+            final FirestoreHelper helper = new FirestoreHelper(this);
+            helper.readData(DBHelper.DEFAULT, new DBHelper.QueryCallback() {
+                @Override
+                public void onCallback(@Nullable DocumentSnapshot data) {
+                    if (!(data != null && data.exists())) {
+                        execute(context, intent);
+                    }
                 }
-            }
-        });
+            });
+        } catch (UnsupportedOperationException e) {
+            execute(context, intent);
+        }
     }
 
     private void execute(Context context, Intent intent) {
@@ -44,5 +48,10 @@ public class DailyAlarmReceiver extends BroadcastReceiver {
                 .setAutoCancel(true);
 
         noti.notify("alarm", builder.build());
+    }
+
+    @Override
+    public void showResult(String message) {
+
     }
 }

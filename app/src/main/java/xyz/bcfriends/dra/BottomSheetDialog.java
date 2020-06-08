@@ -26,9 +26,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import xyz.bcfriends.dra.util.DBHelper;
 import xyz.bcfriends.dra.util.DepressStatusUtil;
 
-public class BottomSheetDialog extends BottomSheetDialogFragment {
+public class BottomSheetDialog extends BottomSheetDialogFragment implements DBHelper.Executor {
 
     private final EventDay eventDay;
 
@@ -71,29 +72,34 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                     .ofInstant(eventDay.getCalendar().toInstant(), eventDay.getCalendar().getTimeZone().toZoneId())
                     .toLocalDate();
 
-            FirestoreHelper helper = new FirestoreHelper();
-            if (!helper.IsUserExist()) {
-                Toast.makeText(requireActivity(), "먼저 로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-                return;
+            try {
+                FirestoreHelper helper = new FirestoreHelper(this);
+                Map<String, Object> data = new HashMap<>();
+                data.put("depressStatus", idx + 1);
+
+                drawable = DepressStatusUtil.getDepressDrawObj(idx + 1);
+
+                da = getResources().getDrawable(drawable, null);
+                da.setTint(Color.BLUE);
+
+                events.add(new EventDay((Calendar) calendar.clone(), da));
+                calendarView.setEvents(events);
+
+                Log.d("a", String.valueOf(getChildFragmentManager()));
+
+                helper.writeData(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), data);
+            } catch (UnsupportedOperationException ignored) {
+
+            } finally {
+                dismiss();
             }
-
-            Map<String, Object> data = new HashMap<>();
-            data.put("depressStatus", idx + 1);
-
-            drawable = DepressStatusUtil.getDepressDrawObj(idx + 1);
-
-            da = getResources().getDrawable(drawable, null);
-            da.setTint(Color.BLUE);
-
-            events.add(new EventDay((Calendar) calendar.clone(), da));
-            calendarView.setEvents(events);
-
-            Log.d("a", String.valueOf(getChildFragmentManager()));
-
-            helper.writeData(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), data);
-            dismiss();
         });
 
         return view;
+    }
+
+    @Override
+    public void showResult(String message) {
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }

@@ -7,13 +7,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import xyz.bcfriends.dra.util.DBHelper;
@@ -25,7 +24,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements DBHelper.Executor {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,11 +41,8 @@ public class HomeFragment extends Fragment {
 
         List<EventDay> events = new ArrayList<>();
 
-        FirestoreHelper firestoreHelper = new FirestoreHelper();
-        FirebaseFirestore FDB = FirebaseFirestore.getInstance();
-        FirebaseAuth userId = FirebaseAuth.getInstance();
-
         try {
+            FirestoreHelper helper = new FirestoreHelper(this);
             LocalDate ld = LocalDate.now();
 
             ld.with(TemporalAdjusters.firstDayOfMonth());
@@ -59,9 +55,9 @@ public class HomeFragment extends Fragment {
 
             calendarView.setDate(calendar);
 
-            firestoreHelper.readDataAll(
-                    FDB.collection("users")
-                            .document(Objects.requireNonNull(userId.getUid()))
+            helper.readDataAll(
+                    helper.getDatabase().collection("users")
+                            .document(Objects.requireNonNull(helper.getUser().getUid()))
                             .collection("Records"),
 
                     new DBHelper.QueryCallback() {
@@ -90,21 +86,28 @@ public class HomeFragment extends Fragment {
                             Log.d("Date Debug", String.valueOf(events.size()));
 
                             calendarView.setEvents(events);
-                            requireActivity().findViewById(R.id.progressBar).setVisibility(View.GONE);
                         }
                     }
             );
 
+        } catch (OutOfDateRangeException e) {
+            e.printStackTrace();
+        } catch (UnsupportedOperationException ignored) {
+
+        } finally {
             calendarView.setOnDayClickListener(eventDay -> {
                 BottomSheetDialog bottomSheetDialog = BottomSheetDialog.getInstance(eventDay);
 
                 bottomSheetDialog.show(requireActivity().getSupportFragmentManager(), "bottomSheet");
             });
-
-        } catch (OutOfDateRangeException e) {
-            e.printStackTrace();
+            v.findViewById(R.id.progressBar).setVisibility(View.GONE);
         }
 
         return v;
+    }
+
+    @Override
+    public void showResult(String message) {
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }
