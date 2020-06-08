@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment implements DBHelper.Executor {
             LocalDate ld = LocalDate.now();
 
             ld.with(TemporalAdjusters.firstDayOfMonth());
-            
+
             calendarView.setDate(calendar);
 
             helper.readDataAll(
