@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -78,12 +79,8 @@ public class PreferencesFragment extends PreferenceFragmentCompat implements DBH
                 dialog.show();
                 break;
             case "alarm_time_manual":
-                new AlertDialog.Builder(requireActivity())
-                        .setTitle("일정 선택")
-                        .setMessage("")
-                        .setPositiveButton("OK", null)
-                        .create()
-                        .show();
+                Navigation.findNavController(requireView()).navigate(R.id.action_PreferencesFragment_to_alarmPreferencesFragment);
+
                 break;
             case "app_info":
                 new AlertDialog.Builder(requireActivity())
