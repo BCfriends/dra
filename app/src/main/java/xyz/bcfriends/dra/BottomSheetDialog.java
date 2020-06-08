@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -20,12 +21,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import xyz.bcfriends.dra.util.DBHelper;
 import xyz.bcfriends.dra.util.DepressStatusUtil;
 
@@ -44,18 +42,58 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements DBHe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.bottom_sheet, container, false);
+        LocalDate localDate = LocalDateTime
+                .ofInstant(eventDay.getCalendar().toInstant(), eventDay.getCalendar().getTimeZone().toZoneId())
+                .toLocalDate();
+        String selectedDay = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        View view = inflater.inflate(R.layout.status_view, container, false);
         View calendarLayout = inflater.inflate(R.layout.calendar, container, false);
 
         Calendar calendar = Calendar.getInstance();
         CalendarView calendarView = calendarLayout.findViewById(R.id.calendarView);
         List<EventDay> events = new ArrayList<>();
-
         Button insertBtn = view.findViewById(R.id.bsInsertBtn);
 //        DataBaseHelper dbh = DataBaseHelper.getInstance(requireActivity());
 
+        try {
+            FirestoreHelper helper = new FirestoreHelper(this);
+            helper.readData(selectedDay, new DBHelper.QueryCallback() {
+                @Override
+                public void onCallback(@Nullable DocumentSnapshot data) {
+                    if (data != null && data.exists()) {
+                        RadioGroup rg = view.findViewById(R.id.feelingRadioGroup);
+                        String depressStatus = Objects.requireNonNull(data.get("depressStatus")).toString();
+
+                        switch (depressStatus) {
+                            case DepressStatus.BAD:
+                                rg.check(R.id.feelingRadioBad);
+                                break;
+                            case DepressStatus.SAD:
+                                rg.check(R.id.feelingRadioSad);
+                                break;
+                            case DepressStatus.NORMAL:
+                                rg.check(R.id.feelingRadioNormal);
+                                break;
+                            case DepressStatus.GOOD:
+                                rg.check(R.id.feelingRadioGood);
+                                break;
+                            case DepressStatus.NICE:
+                                rg.check(R.id.feelingRadioNice);
+                        }
+                        String memo = (String) data.get("memo");
+                        EditText ed = view.findViewById(R.id.memo);
+                        ed.setText(memo);
+                    }
+                }
+            });
+        } catch (UnsupportedOperationException e) {
+
+        }
+
         insertBtn.setOnClickListener(v -> {
-            RadioGroup rg = view.findViewById(R.id.fellingRadioGroup);
+            RadioGroup rg = view.findViewById(R.id.feelingRadioGroup);
+            EditText ed = view.findViewById(R.id.memo);
 
             Drawable da;
             int drawable;
@@ -68,14 +106,11 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements DBHe
             View radioButton = rg.findViewById(radioButtonId);
             int idx = rg.indexOfChild(radioButton);
 
-            LocalDate localDate = LocalDateTime
-                    .ofInstant(eventDay.getCalendar().toInstant(), eventDay.getCalendar().getTimeZone().toZoneId())
-                    .toLocalDate();
-
             try {
                 FirestoreHelper helper = new FirestoreHelper(this);
                 Map<String, Object> data = new HashMap<>();
                 data.put("depressStatus", idx + 1);
+                data.put("memo", ed.getText().toString());
 
                 drawable = DepressStatusUtil.getDepressDrawObj(idx + 1);
 
@@ -87,7 +122,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements DBHe
 
                 Log.d("a", String.valueOf(getChildFragmentManager()));
 
-                helper.writeData(localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), data);
+                helper.writeData(selectedDay, data);
             } catch (UnsupportedOperationException ignored) {
 
             } finally {
