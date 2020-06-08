@@ -29,6 +29,11 @@
             android:summaryOff="알림을 받지 않습니다."
             android:defaultValue="true"
             />
+        <Preference
+            android:title="면담 일정 설정"
+            android:summary="알림을 받을 시간을 설정합니다."
+            android:key="alarm_time_manual"
+            android:dependency="alarm_schedule" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Debug">
