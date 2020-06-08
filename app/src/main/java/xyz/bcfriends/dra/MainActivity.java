@@ -1,6 +1,7 @@
 package xyz.bcfriends.dra;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -79,8 +80,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.add_device:
-                Intent intent = new Intent(this, WebViewActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(this, WebViewActivity.class);
+//                startActivity(intent);
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://192.168.219.105:3000/test"));
+                startActivity(browserIntent);
                 break;
             default:
                 break;
