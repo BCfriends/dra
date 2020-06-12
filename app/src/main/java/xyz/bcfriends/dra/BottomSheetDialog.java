@@ -14,6 +14,10 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -127,6 +131,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements DBHe
 
             } finally {
                 dismiss();
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.homeFragment);
             }
         });
 
