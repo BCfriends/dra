@@ -16,7 +16,7 @@ import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import xyz.bcfriends.dra.util.DBHelper;
-import xyz.bcfriends.dra.util.DepressStatusUtil;
+import xyz.bcfriends.dra.util.DepressStatus;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -75,7 +75,7 @@ public class HomeFragment extends Fragment implements DBHelper.Executor {
 
                                     depressStatus = String.valueOf(document.getData().get("depressStatus"));
 
-                                    drawable = DepressStatusUtil.getDepressDrawObj(depressStatus);
+                                    drawable = DepressStatus.getDepressDrawObj(depressStatus);
 
                                     da = getResources().getDrawable(drawable, null);
                                     da.setTint(Color.BLUE);
@@ -97,7 +97,7 @@ public class HomeFragment extends Fragment implements DBHelper.Executor {
             v.findViewById(R.id.progressBar).setVisibility(View.GONE);
         } finally {
             calendarView.setOnDayClickListener(eventDay -> {
-                BottomSheetDialog bottomSheetDialog = BottomSheetDialog.getInstance(eventDay);
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(eventDay);
 
                 bottomSheetDialog.show(requireActivity().getSupportFragmentManager(), "bottomSheet");
             });

@@ -14,10 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -29,17 +26,13 @@ import java.util.*;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import xyz.bcfriends.dra.util.DBHelper;
-import xyz.bcfriends.dra.util.DepressStatusUtil;
+import xyz.bcfriends.dra.util.DepressStatus;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment implements DBHelper.Executor {
 
     private final EventDay eventDay;
 
-    public static BottomSheetDialog getInstance(EventDay ed) {
-        return new BottomSheetDialog(ed);
-    }
-
-    private BottomSheetDialog(EventDay ed) {
+    public BottomSheetDialog(EventDay ed) {
         this.eventDay = ed;
     }
 
@@ -116,7 +109,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements DBHe
                 data.put("depressStatus", idx + 1);
                 data.put("memo", ed.getText().toString());
 
-                drawable = DepressStatusUtil.getDepressDrawObj(idx + 1);
+                drawable = DepressStatus.getDepressDrawObj(idx + 1);
 
                 da = getResources().getDrawable(drawable, null);
                 da.setTint(Color.BLUE);
