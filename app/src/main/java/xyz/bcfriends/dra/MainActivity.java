@@ -1,5 +1,8 @@
 package xyz.bcfriends.dra;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -69,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
                 FindPiDevice controller = new FindPiDevice();
                 try {
                     String response = controller.execute().get();
+
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("label", response); //TODO
+                    clipboard.setPrimaryClip(clip);
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Result").setMessage(response);

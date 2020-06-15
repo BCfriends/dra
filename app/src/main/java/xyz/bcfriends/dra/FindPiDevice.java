@@ -1,27 +1,18 @@
 package xyz.bcfriends.dra;
 
 import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import java.io.IOException;
-import java.net.*;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-import static android.content.Context.CLIPBOARD_SERVICE;
-import static androidx.core.content.ContextCompat.getSystemService;
+import java.io.IOException;
+import java.net.*;
 
 public class FindPiDevice extends AsyncTask<String, Integer, String> {
     private static final String tag = "SearchPi";
@@ -32,16 +23,15 @@ public class FindPiDevice extends AsyncTask<String, Integer, String> {
             "\r\n";
 
     private static final int port = 1900;
-    Context context;
 
-    public FindPiDevice(Context context) {
+    public FindPiDevice() {
         super();
-        this.context = context;
     }
 
     @Override
     protected String doInBackground(String... strings) {
         String response = "";
+        String result = "";
         byte[] sendData;
         byte[] receiveData = new byte[1024];
         sendData = query.getBytes();
@@ -83,24 +73,24 @@ public class FindPiDevice extends AsyncTask<String, Integer, String> {
         }
 
         response = new String(receivePacket.getData(), 0, receivePacket.getLength());
-        String[] s = response.split("LOCATION: ");
-        Log.d(tag, "Response contains: " + s[1]);
-
+        try {
+            String[] s = response.split("LOCATION: ");
+            Log.d(tag, "Response contains: " + s[1]);
+            result = s[1];
+        } catch (Exception e) {
+            e.printStackTrace(); //TODO
+        }
 
         URL url = null;
         try {
-            url = new URL(s[1]);
+            url = new URL(result);
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(new InputSource(url.openStream()));
             doc.getDocumentElement().normalize();
+            result = doc.getDocumentElement().getNodeValue();
 
-            Log.d(tag, "Root element :" + doc.getDocumentElement().getNodeValue());
-
-
-//            android.content.ClipboardManager clipboard =  (android.content.ClipboardManager) getSystemService(context, CLIPBOARD_SERVICE);
-//            ClipData clip = ClipData.newPlainText("label", "Text to Copy");
-//            clipboard.setPrimaryClip(clip);
+            Log.d(tag, "Root element :" + result);
 
         } catch (MalformedURLException | ParserConfigurationException e) {
             e.printStackTrace();
@@ -111,7 +101,7 @@ public class FindPiDevice extends AsyncTask<String, Integer, String> {
         }
 
 
-        return s[1];
+        return result;
     }
 
     @Override
