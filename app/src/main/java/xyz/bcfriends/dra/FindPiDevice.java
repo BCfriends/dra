@@ -1,10 +1,27 @@
 package xyz.bcfriends.dra;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 import java.io.IOException;
 import java.net.*;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
 
 public class FindPiDevice extends AsyncTask<String, Integer, String> {
     private static final String tag = "SearchPi";
@@ -15,9 +32,11 @@ public class FindPiDevice extends AsyncTask<String, Integer, String> {
             "\r\n";
 
     private static final int port = 1900;
+    Context context;
 
-    public FindPiDevice() {
+    public FindPiDevice(Context context) {
         super();
+        this.context = context;
     }
 
     @Override
@@ -63,19 +82,36 @@ public class FindPiDevice extends AsyncTask<String, Integer, String> {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < 10; i++) {
-            response = new String(receivePacket.getData());
-            Log.d(tag, "Response contains: " + response);
-            if (response.contains("/jambon-3000.xml")) {
-                Log.d("logCat", receivePacket.getAddress().toString());
-                return response;
-            }
-            else {
-                Log.d("logCat", "Popz! Pi not found");
-            }
+        response = new String(receivePacket.getData(), 0, receivePacket.getLength());
+        String[] s = response.split("LOCATION: ");
+        Log.d(tag, "Response contains: " + s[1]);
+
+
+        URL url = null;
+        try {
+            url = new URL(s[1]);
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(new InputSource(url.openStream()));
+            doc.getDocumentElement().normalize();
+
+            Log.d(tag, "Root element :" + doc.getDocumentElement().getNodeValue());
+
+
+//            android.content.ClipboardManager clipboard =  (android.content.ClipboardManager) getSystemService(context, CLIPBOARD_SERVICE);
+//            ClipData clip = ClipData.newPlainText("label", "Text to Copy");
+//            clipboard.setPrimaryClip(clip);
+
+        } catch (MalformedURLException | ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        return null;
+
+        return s[1];
     }
 
     @Override
