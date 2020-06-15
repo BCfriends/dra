@@ -1,6 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:background="#026BC1">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="0.1"
+        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginBottom="30dp"
+        android:layout_gravity="center">
+
+        <CheckBox
+            android:id="@+id/checkBox1"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColorHint="#848484"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:layout_marginLeft="17dp"
+            android:layout_marginTop="2dp"
+            />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:textSize="35dp"
+            android:gravity="center"
+            android:hint="이메일"
+            android:textColorHint="#848484" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_gravity="center">
+
+        <CheckBox
+            android:id="@+id/checkBox2"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColorHint="#848484"
+            android:scaleX="1.5"
+            android:scaleY="1.5"
+            android:layout_marginLeft="17dp"
+            android:layout_marginTop="2dp"
+            />
+
+        <EditText
+            android:id="@+id/kakao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:textSize="35dp"
+            android:gravity="center"
+            android:hint="Kakao"
+            android:textColorHint="#848484" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_weight="0.1"
+
+        />
+
+
+    <Button
+        android:id="@+id/Export"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:focusable="true"
+        android:hint="내보내기"
+        android:layout_marginBottom="30dp"
+        />
+</LinearLayout>
