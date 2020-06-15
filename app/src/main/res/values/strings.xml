@@ -74,4 +74,6 @@
     <string name="hint_email">example@gmail.com</string>
     <string name="hint_kakao">KakaoTalk ID</string>
     <string name="export_excel_guide">엑셀 파일을 전송할 곳을 체크해주세요.</string>
+    <string name="export_memo">메모</string>
+    <string name="export_graph">그래프</string>
 </resources>

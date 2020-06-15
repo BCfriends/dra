@@ -68,7 +68,6 @@ public class ExportExcelFragment extends Fragment {
         cell.setCellStyle(cellStyle);
 
 
-
         String filename = "workbook.xlsx";
         File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
         File xls = new File(dir, filename);
