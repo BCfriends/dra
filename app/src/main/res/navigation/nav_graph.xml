@@ -19,6 +19,11 @@
         android:name="xyz.bcfriends.dra.AnalyticsFragment"
         android:label="AnalyticsFragment" />
     <fragment
+        android:id="@+id/excelFragment"
+        android:name="xyz.bcfriends.dra.ExportExcelFragment"
+        android:label="ExportExcelFragment" />
+
+    <fragment
         android:id="@+id/shareFragment"
         android:name="xyz.bcfriends.dra.ShareFragment"
         android:label="ShareFragment" />
