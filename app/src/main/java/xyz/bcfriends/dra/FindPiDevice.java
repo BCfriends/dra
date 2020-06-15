@@ -5,14 +5,21 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.*;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 
 public class FindPiDevice extends AsyncTask<String, Integer, String> {
     private static final String tag = "SearchPi";
@@ -81,25 +88,46 @@ public class FindPiDevice extends AsyncTask<String, Integer, String> {
             e.printStackTrace(); //TODO
         }
 
-        URL url = null;
         try {
-            url = new URL(result);
+            URL url = new URL(result);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), StandardCharsets.UTF_8));
+            String line;
+            StringBuilder sb = new StringBuilder();
+
+            while ((line = br.readLine()) != null) {
+                sb.append(line.trim());
+            }
+
+            InputSource is = new InputSource(new StringReader(sb.toString()));
+
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setNamespaceAware(true);
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new InputSource(url.openStream()));
-            doc.getDocumentElement().normalize();
-            result = doc.getDocumentElement().getNodeValue();
+            Document doc = db.parse(is);
 
-            Log.d(tag, "Root element :" + result);
+            XPathFactory xPathFactory = XPathFactory.newInstance();
+            XPath xPath = xPathFactory.newXPath();
 
-        } catch (MalformedURLException | ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            XPathExpression expr = xPath.compile("//item");
+            NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Node node = nodeList.item(i);
+                result = node.getTextContent();
+//                System.out.println("현재 노드 이름 : " + node.getNodeName());
+//                System.out.println("현재 노드 타입 : " + node.getNodeType());
+//                System.out.println("현재 노드 값 : " + node.getTextContent());
+//                System.out.println("현재 노드 네임스페이스 : " + node.getPrefix());
+//                System.out.println("현재 노드의 다음 노드 : " + node.getNextSibling());
+            }
+
+            Log.d(tag, "Result: " + result); //TODO
+
+        } catch (ParserConfigurationException | XPathExpressionException | SAXException | IOException e) {
             e.printStackTrace();
         }
-
 
         return result;
     }
