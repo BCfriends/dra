@@ -71,4 +71,7 @@
     <string name="google_title_text">Google Sign In</string>
 
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+    <string name="hint_email">example@gmail.com</string>
+    <string name="hint_kakao">KakaoTalk ID</string>
+    <string name="export_excel_guide">엑셀 파일을 전송할 곳을 체크해주세요.</string>
 </resources>

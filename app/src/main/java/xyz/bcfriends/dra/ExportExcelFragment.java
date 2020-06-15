@@ -1,6 +1,7 @@
 package xyz.bcfriends.dra;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -66,7 +68,12 @@ public class ExportExcelFragment extends Fragment {
         cell.setCellStyle(cellStyle);
 
 
-        try (OutputStream fileOut = new FileOutputStream("workbook.xlsx")) {
+
+        String filename = "workbook.xlsx";
+        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        File xls = new File(dir, filename);
+
+        try (OutputStream fileOut = new FileOutputStream(xls)) {
             wb.write(fileOut);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
