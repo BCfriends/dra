@@ -24,6 +24,7 @@
 
     <string name="menu_stat">통계</string>
     <string name="menu_share">공유하기</string>
+    <string name="menu_export">내보내기</string>
     <string name="more">더보기</string>
     <string name="content_description_more">더보기</string>
 
