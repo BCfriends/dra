@@ -13,10 +13,6 @@
             android:icon="@drawable/ic_menu_stat"
             android:title="@string/menu_stat" />
         <item
-            android:id="@id/shareFragment"
-            android:icon="@drawable/ic_menu_share"
-            android:title="@string/menu_share" />
-        <item
             android:id="@id/excelFragment"
             android:icon="@drawable/ic_menu_share"
             android:title="@string/menu_export" />

@@ -22,9 +22,4 @@
         android:id="@+id/excelFragment"
         android:name="xyz.bcfriends.dra.ExportExcelFragment"
         android:label="엑셀 내보내기" />
-
-    <fragment
-        android:id="@+id/shareFragment"
-        android:name="xyz.bcfriends.dra.ShareFragment"
-        android:label="ShareFragment" />
 </navigation>
