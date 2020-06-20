@@ -108,8 +108,11 @@ public class ExportExcelFragment extends Fragment implements DBHelper.Executor {
 
                                         // Note
                                         if (noteFlag) {
-                                            cell = row.createCell(3);
-                                            cell.setCellValue(Objects.requireNonNull(document.getData().get("note")).toString());
+                                            String note = document.getData().get("note").toString();
+                                            if (!note.isEmpty()) {
+                                                cell = row.createCell(3);
+                                                cell.setCellValue(note);
+                                            }
                                         }
                                     }
                                 }
