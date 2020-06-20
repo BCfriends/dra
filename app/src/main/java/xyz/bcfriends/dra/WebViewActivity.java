@@ -30,9 +30,9 @@ public class WebViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         // 웹뷰 시작
-        mContainer = (FrameLayout) findViewById(R.id.webViewFrame);
-        mWebView = (WebView) findViewById(R.id.webView);
-        mWebViewPop = (WebView) findViewById(R.id.webView);
+        mContainer = findViewById(R.id.webViewFrame);
+        mWebView = findViewById(R.id.webView);
+        mWebViewPop = findViewById(R.id.webView);
 
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);

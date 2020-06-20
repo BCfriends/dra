@@ -25,6 +25,7 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.WorkbookUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -55,11 +56,13 @@ public class ExportExcelFragment extends Fragment implements DBHelper.Executor {
         exportButton.setOnClickListener(v1 -> {
             Workbook wb = new XSSFWorkbook();
 
-            String safeName = WorkbookUtil.createSafeSheetName("통계");
+            String safeStatName = WorkbookUtil.createSafeSheetName("통계");
+            String safeGraphName = WorkbookUtil.createSafeSheetName("그래프");
             CreationHelper createHelper = wb.getCreationHelper();
             FirestoreHelper firestoreHelper = new FirestoreHelper(this);
 
-            Sheet statSheet = wb.createSheet(safeName);
+            Sheet statSheet = wb.createSheet(safeStatName);
+            Sheet graphSheet = wb.createSheet(safeGraphName);
 
             CheckBox exportMemo = v.findViewById(R.id.export_memo);
             boolean noteFlag = exportMemo.isChecked();
@@ -87,31 +90,41 @@ public class ExportExcelFragment extends Fragment implements DBHelper.Executor {
                                         }
                                     } else {
                                         row = statSheet.createRow(statSheet.getLastRowNum() + 1);
-                                    }
 
-                                    // Date
-                                    Cell cell = row.createCell(1);
-                                    cell.setCellValue(LocalDate.parse(document.getId()));
-                                    CellStyle cellStyle = wb.createCellStyle();
-                                    cellStyle.setDataFormat(
-                                            createHelper.createDataFormat().getFormat("yyyy-mm-dd"));
-                                    cell.setCellStyle(cellStyle);
+                                        Cell cell = row.createCell(0);
+                                        cell.setCellValue(statSheet.getLastRowNum());
 
-                                    // DepressStatus
-                                    cell = row.createCell(2);
-                                    cell.setCellValue(Objects.requireNonNull(document.getData().get("depressStatus")).toString());
+                                        // Date
+                                        cell = row.createCell(1);
+                                        cell.setCellValue(LocalDate.parse(document.getId()));
+                                        CellStyle cellStyle = wb.createCellStyle();
+                                        cellStyle.setDataFormat(
+                                                createHelper.createDataFormat().getFormat("yyyy-mm-dd"));
+                                        cell.setCellStyle(cellStyle);
 
-                                    // Note
-                                    if (noteFlag) {
-                                        cell = row.createCell(3);
-                                        cell.setCellValue(Objects.requireNonNull(document.getData().get("note")).toString());
+                                        // DepressStatus
+                                        cell = row.createCell(2);
+                                        cell.setCellValue(Objects.requireNonNull(document.getData().get("depressStatus")).toString());
+
+                                        // Note
+                                        if (noteFlag) {
+                                            cell = row.createCell(3);
+                                            cell.setCellValue(Objects.requireNonNull(document.getData().get("note")).toString());
+                                        }
                                     }
                                 }
                             }
                         }
                     });
 
-            File xls = new File(requireActivity().getApplicationContext().getFilesDir() + "/" + safeName + ".xlsx");
+            for (int i = 0; i < statSheet.getLastRowNum(); i++) {
+                statSheet.autoSizeColumn(i);
+                statSheet.setColumnWidth(i, (statSheet.getColumnWidth(i)) + 512 );
+            }
+
+            statSheet.setAutoFilter(CellRangeAddress.valueOf("C5:F200"));
+
+            File xls = new File(requireActivity().getApplicationContext().getFilesDir() + "/" + safeStatName + ".xlsx");
 
             try {
 //            xls = File.createTempFile("통계", ".xlsx", requireActivity().getExternalCacheDir());
