@@ -10,19 +10,19 @@ import xyz.bcfriends.dra.util.DeviceBootReceiver;
 
 import java.util.Calendar;
 
-public class DailyAlarmPresenter implements Alarm.Presenter {
-    private final DailyAlarmImpl alarm;
+public class AlarmPresenter implements Alarm.Presenter {
+    private final AlarmImpl alarm;
     private final PendingIntent pendingIntent;
     private final Class<? extends BroadcastReceiver> receiver;
 
-    public DailyAlarmPresenter(Context mContext, SharedPreferences prefs, @NonNull PendingIntent pendingIntent) {
+    public AlarmPresenter(Context mContext, SharedPreferences prefs, @NonNull PendingIntent pendingIntent) {
         this(mContext, prefs, pendingIntent, DeviceBootReceiver.class);
     }
 
-    public DailyAlarmPresenter(Context mContext, SharedPreferences prefs, @NonNull PendingIntent pendingIntent, @NonNull Class<? extends BroadcastReceiver> receiver) {
+    public AlarmPresenter(Context mContext, SharedPreferences prefs, @NonNull PendingIntent pendingIntent, @NonNull Class<? extends BroadcastReceiver> receiver) {
         this.receiver = receiver;
         this.pendingIntent = pendingIntent;
-        this.alarm = new DailyAlarmImpl(mContext, prefs);
+        this.alarm = new AlarmImpl(mContext, prefs);
     }
 
     public void scheduleAlarm() {

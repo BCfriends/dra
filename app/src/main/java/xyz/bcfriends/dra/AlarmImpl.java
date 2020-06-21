@@ -14,12 +14,12 @@ import xyz.bcfriends.dra.util.Alarm;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class DailyAlarmImpl implements Alarm {
+public class AlarmImpl implements Alarm {
     private final Context mContext;
     private final SharedPreferences prefs;
     private final AlarmManager alarmManager;
 
-    DailyAlarmImpl(Context mContext, SharedPreferences prefs) {
+    AlarmImpl(Context mContext, SharedPreferences prefs) {
         this.mContext = mContext;
         this.prefs = prefs;
         this.alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);

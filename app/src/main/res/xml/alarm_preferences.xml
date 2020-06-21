@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <SwitchPreference
-        android:key="alarm_weekly"
-        android:title="매 주 알림"
-        android:defaultValue="false"
-        android:disableDependentsState="true"
-        />
     <Preference
-        android:title="요일 설정"
+        android:title="날짜 설정"
         android:summary="현재 설정되어 있지 않음"
-        android:key="alarm_weekly_time" />
+        android:key="manual_alarm_date" />
+    <Preference
+        android:title="알림 시간 설정"
+        android:summary="1시간 전"
+        android:key="manual_alarm_time" />
 </PreferenceScreen>
