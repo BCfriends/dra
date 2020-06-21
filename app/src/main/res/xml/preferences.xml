@@ -22,18 +22,10 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="면담 일정 알림">
-        <SwitchPreference
-            android:key="alarm_schedule"
-            android:title="면담 일정 알림 활성화"
-            android:summaryOn="지정된 면담 일정이 되면 알림을 받습니다."
-            android:summaryOff="알림을 받지 않습니다."
-            android:defaultValue="true"
-            />
         <Preference
             android:title="면담 일정 설정"
-            android:summary="알림을 받을 시간을 설정합니다."
-            android:key="alarm_time_manual"
-            android:dependency="alarm_schedule" />
+            android:summary="면담 일정 알림 설정 및 일정 선택"
+            android:key="alarm_manual_prefs" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Debug">

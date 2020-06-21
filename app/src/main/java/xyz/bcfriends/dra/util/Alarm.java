@@ -7,10 +7,8 @@ import androidx.annotation.NonNull;
 import java.util.Calendar;
 
 public interface Alarm {
-    public static int DEFAULT_CHANNEL = 0;
-    public static int TEST_CHANNEL = 1;
-    public static int WEEKLY_CHANNEL = 2;
-    public static int MONTHLY_CHANNEL = 3;
+    int DEFAULT_CHANNEL = 0;
+    int MANUAL_CHANNEL = 1;
 
     void setSchedule(PendingIntent pendingIntent);
     void unsetSchedule(PendingIntent pendingIntent);
@@ -19,6 +17,7 @@ public interface Alarm {
     void saveScheduleTime(Calendar scheduleTime);
 
     interface Presenter {
+        void scheduleAlarm();
         void scheduleAlarm(@NonNull Calendar alarmTime);
         void cancelAlarm();
         Calendar getScheduleTime();

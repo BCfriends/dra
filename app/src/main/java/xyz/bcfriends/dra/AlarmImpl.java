@@ -66,6 +66,7 @@ public class AlarmImpl implements Alarm {
                 PackageManager.DONT_KILL_APP);
     }
 
+    @Override
     public Calendar loadScheduleTime() {
         if (!(prefs.contains("hourOfDay") && prefs.contains("minute"))) {
             return Calendar.getInstance();
@@ -86,6 +87,7 @@ public class AlarmImpl implements Alarm {
         return cal;
     }
 
+    @Override
     public void saveScheduleTime(Calendar scheduleTime) {
         int hourOfDay = scheduleTime.get(Calendar.HOUR_OF_DAY);
         int minute = scheduleTime.get(Calendar.MINUTE);

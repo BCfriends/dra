@@ -44,7 +44,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat implements DBH
         final Intent alarmIntent = new Intent(requireActivity(), DailyAlarmReceiver.class);
         final PendingIntent pendingIntent = PendingIntent.getBroadcast(requireActivity(), Alarm.DEFAULT_CHANNEL, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        final AlarmPresenter presenter = new AlarmPresenter(requireActivity(), prefs, pendingIntent);
+        final Alarm.Presenter presenter = new AlarmPresenter(requireActivity(), prefs, pendingIntent);
 
         switch (preference.getKey()) {
             case "google_login":
@@ -78,9 +78,8 @@ public class PreferencesFragment extends PreferenceFragmentCompat implements DBH
 
                 dialog.show();
                 break;
-            case "alarm_time_manual":
+            case "alarm_manual_prefs":
                 Navigation.findNavController(requireView()).navigate(R.id.action_PreferencesFragment_to_alarmPreferencesFragment);
-
                 break;
             case "app_info":
                 new AlertDialog.Builder(requireActivity())

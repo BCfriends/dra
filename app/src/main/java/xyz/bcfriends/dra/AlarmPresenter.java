@@ -11,7 +11,7 @@ import xyz.bcfriends.dra.util.DeviceBootReceiver;
 import java.util.Calendar;
 
 public class AlarmPresenter implements Alarm.Presenter {
-    private final AlarmImpl alarm;
+    private final Alarm alarm;
     private final PendingIntent pendingIntent;
     private final Class<? extends BroadcastReceiver> receiver;
 
