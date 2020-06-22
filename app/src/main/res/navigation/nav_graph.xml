@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/analyticsFragment"
         android:name="xyz.bcfriends.dra.AnalyticsFragment"
-        android:label="AnalyticsFragment" />
+        android:label="통계 그래프" />
     <fragment
         android:id="@+id/excelFragment"
         android:name="xyz.bcfriends.dra.ExportExcelFragment"
