@@ -9,6 +9,6 @@
     <item
         android:id="@+id/add_device"
         android:orderInCategory="100"
-        android:title="기기 연결 테스트"
+        android:title="기기 연결 페이지"
         app:showAsAction="never" />
 </menu>

@@ -41,7 +41,7 @@ public class TestActivity extends AppCompatActivity {
             noti.createNotificationChannel(CHANNEL_ID, "테스트 알림 채널", "테스트용 알림 채널");
             final Intent intent = new Intent(TestActivity.this, UserPromptActivity.class);
 
-            intent.setFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
             PendingIntent pendingIntent = PendingIntent.getActivity(TestActivity.this, 0, intent, 0);
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(TestActivity.this, CHANNEL_ID)

@@ -1,5 +1,7 @@
 package xyz.bcfriends.dra;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import androidx.navigation.Navigation;
@@ -29,7 +32,7 @@ import xyz.bcfriends.dra.util.DBHelper;
 import xyz.bcfriends.dra.util.DepressStatus;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment implements DBHelper.Executor {
-
+    private BottomSheetListener mListener;
     private final EventDay eventDay;
 
     public BottomSheetDialog(EventDay ed) {
@@ -127,7 +130,6 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements DBHe
 
             } finally {
                 dismiss();
-                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.homeFragment);
             }
         });
 
@@ -137,5 +139,26 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements DBHe
     @Override
     public void showResult(String message) {
 
+    }
+
+    public interface BottomSheetListener {
+        void onDismissed();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            mListener = (BottomSheetListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement BottomSheetListener!");
+        }
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        mListener.onDismissed();
     }
 }
