@@ -3,10 +3,12 @@ package xyz.bcfriends.dra;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.applandeo.materialcalendarview.EventDay;
 
+import java.util.Calendar;
 import java.util.Objects;
 
-public class UserPromptActivity extends AppCompatActivity implements UserPromptDialog.BottomSheetListener {
+public class UserPromptActivity extends AppCompatActivity implements BottomSheetDialog.BottomSheetListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,13 +16,9 @@ public class UserPromptActivity extends AppCompatActivity implements UserPromptD
         setContentView(R.layout.activity_user_prompt);
 
 //        Objects.requireNonNull(getSupportActionBar()).hide();
-        UserPromptDialog dialog = new UserPromptDialog();
-        dialog.show(getSupportFragmentManager(), "exampleBottomSheet");
-    }
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(new EventDay(Calendar.getInstance()));
 
-    @Override
-    public void onButtonClicked(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+        bottomSheetDialog.show(getSupportFragmentManager(), "bottomSheet");
     }
 
     @Override

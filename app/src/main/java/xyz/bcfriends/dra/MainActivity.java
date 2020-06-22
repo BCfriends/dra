@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 
 import static androidx.navigation.ui.NavigationUI.navigateUp;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BottomSheetDialog.BottomSheetListener {
     private AppBarConfiguration mAppBarConfiguration;
     private NavController navController;
     private DrawerLayout drawer;
@@ -97,5 +97,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onDismissed() {
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.homeFragment);
     }
 }
