@@ -163,9 +163,10 @@ public class ExportExcelFragment extends Fragment implements DBHelper.Executor {
 
                                     if (emailValid) {
                                         Uri uri = Uri.parse("mailto:" + exportEmail.getText());
+                                        Uri path = Uri.fromFile(file);
                                         Intent it = new Intent(Intent.ACTION_SENDTO, uri);
                                         it.putExtra(Intent.EXTRA_SUBJECT, "excel file email test");
-                                        it.putExtra(Intent.EXTRA_STREAM, Uri.parse("content://" + file));
+                                        it.putExtra(Intent.EXTRA_STREAM, path);
                                         startActivityForResult(it, 200);
                                     } else {
                                         Toast.makeText(requireContext().getApplicationContext(), "이메일을 다시 확인해주세요.", Toast.LENGTH_SHORT).show();

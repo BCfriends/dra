@@ -28,14 +28,8 @@
             android:layout_weight="1"
             android:inputType="textEmailAddress"
             android:hint="@string/hint_email" />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/export_kakaoID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="60dp"
@@ -43,15 +37,12 @@
         android:gravity="center"
         >
         <EditText
+            android:id="@+id/export_kakaoID"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text"
             android:hint="@string/hint_kakao" />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
