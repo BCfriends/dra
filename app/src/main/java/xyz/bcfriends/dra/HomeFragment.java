@@ -1,5 +1,6 @@
 package xyz.bcfriends.dra;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.exceptions.OutOfDateRangeException;
@@ -37,6 +39,7 @@ public class HomeFragment extends Fragment implements DBHelper.Executor {
 
         Calendar calendar = Calendar.getInstance();
         CalendarView calendarView = v.findViewById(R.id.calendarView);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireActivity());
 
         List<EventDay> events = new ArrayList<>();
 
@@ -47,6 +50,15 @@ public class HomeFragment extends Fragment implements DBHelper.Executor {
             ld.with(TemporalAdjusters.firstDayOfMonth());
 
             calendarView.setDate(calendar);
+
+            if (prefs.contains("year") && prefs.contains("month") && prefs.contains("dayOfMonth")) {
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.YEAR, prefs.getInt("year", 1970));
+                cal.set(Calendar.MONTH, prefs.getInt("month", 1));
+                cal.set(Calendar.DAY_OF_MONTH, prefs.getInt("dayOfMonth", 1));
+                calendarView.setHighlightedDays(new ArrayList<>(Collections.singletonList(cal)));
+                events.add(new EventDay(cal, R.drawable.ic_access_alarm_black_24dp));
+            }
 
             helper.readDataAll(
                     helper.getDatabase().collection("users")
