@@ -209,6 +209,6 @@ public class ExportExcelFragment extends Fragment implements DBHelper.Executor {
 
     @Override
     public void showResult(String message) {
-
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }
