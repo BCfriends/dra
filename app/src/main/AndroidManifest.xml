@@ -17,11 +17,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         >
-        <activity android:name=".GoogleSignInActivity" />
-        <activity android:name=".TestActivity" />
+        <activity android:name=".GoogleSignInActivity" android:excludeFromRecents="true" />
+        <activity android:name=".TestActivity" android:excludeFromRecents="true" />
         <activity
             android:name=".UserPromptActivity"
-            android:theme="@style/Transparent" />
+            android:theme="@style/Transparent"
+            android:excludeFromRecents="true" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppFragment">
