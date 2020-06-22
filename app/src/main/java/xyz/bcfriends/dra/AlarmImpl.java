@@ -1,4 +1,4 @@
-package xyz.bcfriends.dra.util;
+package xyz.bcfriends.dra;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import xyz.bcfriends.dra.util.Alarm;
 
 import java.util.Calendar;
 import java.util.Objects;
@@ -65,25 +66,28 @@ public class AlarmImpl implements Alarm {
                 PackageManager.DONT_KILL_APP);
     }
 
+    @Override
     public Calendar loadScheduleTime() {
         if (!(prefs.contains("hourOfDay") && prefs.contains("minute"))) {
             return Calendar.getInstance();
         }
 
         Calendar cal = Calendar.getInstance();
+        Calendar origCal = (Calendar) cal.clone();
 
         int hourOfDay = prefs.getInt("hourOfDay", -1);
         int minute = prefs.getInt("minute", -1);
         cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
         cal.set(Calendar.MINUTE, minute);
 
-        if (cal.before(Calendar.getInstance())) {
+        if (cal.before(origCal)) {
             cal.add(Calendar.DATE, 1);
         }
 
         return cal;
     }
 
+    @Override
     public void saveScheduleTime(Calendar scheduleTime) {
         int hourOfDay = scheduleTime.get(Calendar.HOUR_OF_DAY);
         int minute = scheduleTime.get(Calendar.MINUTE);

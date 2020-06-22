@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -17,7 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import xyz.bcfriends.dra.util.AlarmPresenter;
+import xyz.bcfriends.dra.util.Alarm;
 import xyz.bcfriends.dra.util.DBHelper;
 
 import java.text.SimpleDateFormat;
@@ -26,7 +27,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class PreferencesFragment extends PreferenceFragmentCompat {
+public class PreferencesFragment extends PreferenceFragmentCompat implements DBHelper.Executor {
     private static final String TAG = "PreferencesFragment";
     SharedPreferences prefs;
 
@@ -41,9 +42,9 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     public boolean onPreferenceTreeClick(Preference preference) {
         super.onPreferenceTreeClick(preference);
         final Intent alarmIntent = new Intent(requireActivity(), DailyAlarmReceiver.class);
-        final PendingIntent pendingIntent = PendingIntent.getBroadcast(requireActivity(), 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent pendingIntent = PendingIntent.getBroadcast(requireActivity(), Alarm.DEFAULT_CHANNEL, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        final AlarmPresenter presenter = new AlarmPresenter(requireActivity(), prefs, pendingIntent);
+        final Alarm.Presenter presenter = new AlarmPresenter(requireActivity(), prefs, pendingIntent);
 
         switch (preference.getKey()) {
             case "google_login":
@@ -77,23 +78,27 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
                 dialog.show();
                 break;
+            case "alarm_manual_prefs":
+                Navigation.findNavController(requireView()).navigate(R.id.action_PreferencesFragment_to_alarmPreferencesFragment);
+                break;
             case "app_info":
-                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-                builder.setTitle("앱 정보").setMessage("Dra v" + BuildConfig.VERSION_NAME);
-                builder.setPositiveButton("OK", null);
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                new AlertDialog.Builder(requireActivity())
+                        .setTitle("앱 정보")
+                        .setMessage("Dra v" + BuildConfig.VERSION_NAME)
+                        .setPositiveButton("OK", null)
+                        .create()
+                        .show();
                 break;
             case "db_test":
-                FirestoreHelper helper = new FirestoreHelper();
-                if (!helper.IsUserExist()) {
-                    Toast.makeText(requireActivity(), "먼저 로그인이 필요합니다.", Toast.LENGTH_SHORT).show();
-                    return true;
+                try {
+                    FirestoreHelper helper = new FirestoreHelper(this);
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("depressStatus", 5);
+                    helper.writeData(DBHelper.DEFAULT, data);
+                    Toast.makeText(requireActivity(), "작업을 실행했습니다.", Toast.LENGTH_SHORT).show();
+                } catch (UnsupportedOperationException ignored) {
+
                 }
-                Map<String, Object> data = new HashMap<>();
-                data.put("depressStatus", 5);
-                helper.writeData(DBHelper.DEFAULT, data);
-                Toast.makeText(requireActivity(), "작업을 실행했습니다.", Toast.LENGTH_SHORT).show();
                 break;
             case "get_firebase_id":
                 FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -108,11 +113,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
 
                         String msg = getString(R.string.msg_token_fmt, token);
                         Log.d(TAG, msg);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-                        builder.setTitle("InstanceID").setMessage(token);
-                        builder.setPositiveButton("OK", null);
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
+                        new AlertDialog.Builder(requireActivity())
+                                .setTitle("InstanceID")
+                                .setMessage(token)
+                                .setPositiveButton("OK", null)
+                                .create()
+                                .show();
                     }
                 });
                 break;
@@ -130,5 +136,10 @@ public class PreferencesFragment extends PreferenceFragmentCompat {
     public void showAlarmMessage(Calendar scheduleTime) {
         String nextNotifyDate = new SimpleDateFormat("yyyy년 MM월 dd일 a hh시 mm분", Locale.getDefault()).format(scheduleTime.getTime());
         Toast.makeText(requireActivity(), nextNotifyDate + "으로 알림이 설정되었습니다.", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showResult(String message) {
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }

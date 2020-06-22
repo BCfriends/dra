@@ -1,6 +1,10 @@
 package xyz.bcfriends.dra;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -69,6 +73,10 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     String response = controller.execute().get();
 
+                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("label", response); //TODO
+                    clipboard.setPrimaryClip(clip);
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Result").setMessage(response);
                     builder.setPositiveButton("OK", null);
@@ -77,6 +85,12 @@ public class MainActivity extends AppCompatActivity {
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                 }
+                break;
+            case R.id.add_device:
+//                Intent intent = new Intent(this, WebViewActivity.class);
+//                startActivity(intent);
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com/device"));
+                startActivity(browserIntent);
                 break;
             default:
                 break;

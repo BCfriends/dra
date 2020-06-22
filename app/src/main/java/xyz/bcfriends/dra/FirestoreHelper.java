@@ -19,20 +19,33 @@ import java.util.Map;
 public class FirestoreHelper implements DBHelper {
     private static final String TAG = "FirestoreHelper";
 
+    private final Executor executor;
     private final FirebaseAuth mAuth;
     private final FirebaseUser mUser;
     private final FirebaseFirestore mDatabase;
     private final Source source;
 
-    public FirestoreHelper() {
-        this(Source.DEFAULT);
+    public FirestoreHelper(Executor executor) {
+        this(executor, Source.DEFAULT);
     }
 
-    public FirestoreHelper(Source source) {
+    public FirestoreHelper(Executor executor, Source source) {
+        this.executor = executor;
         this.mAuth = FirebaseAuth.getInstance();
         this.mUser = mAuth.getCurrentUser();
         this.mDatabase = FirebaseFirestore.getInstance();
         this.source = source;
+        checkUnsupportedOperation();
+    }
+
+    @Override
+    public FirebaseUser getUser() {
+        return this.mUser;
+    }
+
+    @Override
+    public FirebaseFirestore getDatabase() {
+        return this.mDatabase;
     }
 
     @Override
@@ -44,6 +57,7 @@ public class FirestoreHelper implements DBHelper {
                     callback.onCallback(task.getResult());
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
+                    executor.showResult("작업 실행 중 문제가 발생했습니다.");
                 }
             }
         });
@@ -59,6 +73,7 @@ public class FirestoreHelper implements DBHelper {
                 }
                 else {
                     Log.d(TAG, "get failed with ", task.getException());
+                    executor.showResult("작업 실행 중 문제가 발생했습니다.");
                 }
             }
         });
@@ -66,17 +81,7 @@ public class FirestoreHelper implements DBHelper {
 
     @Override
     public void readData(@NonNull String key, @NonNull QueryCallback callback) {
-        if (key.equals(DBHelper.DEFAULT)) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
-            key = format.format(new Date());
-        }
-
-        DocumentReference docRef = mDatabase.collection("users")
-                .document(mUser.getUid())
-                .collection("Records")
-                .document(key);
-
-        readData(docRef, callback);
+        readData(getDocumentWithKey(key), callback);
     }
 
     @Override
@@ -90,26 +95,33 @@ public class FirestoreHelper implements DBHelper {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.w(TAG, "Error writing document", e);
+                executor.showResult("작업 실행 중 문제가 발생했습니다.");
             }
         });
     }
 
     @Override
     public void writeData(@NonNull String key, @NonNull Map<String, Object> data) {
+        writeData(getDocumentWithKey(key), data);
+    }
+
+    @Override
+    public void checkUnsupportedOperation() throws UnsupportedOperationException {
+        if (mAuth.getCurrentUser() == null) {
+            executor.showResult("먼저 로그인이 필요합니다.");
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    DocumentReference getDocumentWithKey(String key) {
         if (key.equals(DBHelper.DEFAULT)) {
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
             key = format.format(new Date());
         }
 
-        DocumentReference docRef = mDatabase.collection("users")
+        return mDatabase.collection("users")
                 .document(mUser.getUid())
                 .collection("Records")
                 .document(key);
-
-        writeData(docRef, data);
-    }
-
-    boolean IsUserExist() {
-        return mAuth.getCurrentUser() != null;
     }
 }

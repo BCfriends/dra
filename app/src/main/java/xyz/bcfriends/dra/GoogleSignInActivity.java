@@ -3,6 +3,7 @@ package xyz.bcfriends.dra;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -15,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,6 +26,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.util.Objects;
 
 public class GoogleSignInActivity extends AppCompatActivity implements
         View.OnClickListener {
@@ -43,6 +47,9 @@ public class GoogleSignInActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google_sign_in);
+
+        Objects.requireNonNull(getSupportActionBar()).hide();
+        googleBtnUi();
 
         // Views
         mStatusTextView = findViewById(R.id.status);
@@ -178,7 +185,7 @@ public class GoogleSignInActivity extends AppCompatActivity implements
             findViewById(R.id.signInButton).setVisibility(View.GONE);
             findViewById(R.id.signOutAndDisconnect).setVisibility(View.VISIBLE);
         } else {
-            mStatusTextView.setText("로그인되지 않음");
+            mStatusTextView.setText("현재 로그아웃된 상태입니다.\nGoogle 계정에 로그인하세요.");
             mDetailTextView.setText(null);
 
             findViewById(R.id.signInButton).setVisibility(View.VISIBLE);
@@ -227,5 +234,30 @@ public class GoogleSignInActivity extends AppCompatActivity implements
     public void onStop() {
         super.onStop();
         hideProgressDialog();
+    }
+
+    private void googleBtnUi() {
+        SignInButton googleButton = (SignInButton) findViewById(R.id.signInButton);
+        googleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        for (int i = 0; i < googleButton.getChildCount(); i++) {
+            View v = googleButton.getChildAt(i);
+
+            if (v instanceof TextView)
+            {
+                TextView tv = (TextView) v;
+                tv.setTextSize(16);
+                tv.setTypeface(null, Typeface.NORMAL);
+                tv.setText("Google로 로그인");
+                tv.setSingleLine(true);
+                tv.setPadding(15, 15, 15, 15);
+                return;
+            }
+        }
     }
 }
