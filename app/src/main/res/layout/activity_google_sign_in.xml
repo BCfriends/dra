@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="4">
+    android:weightSum="9">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,13 +18,8 @@
             android:id="@+id/titleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/google_title_text" />
-
-        <TextView
-            android:id="@+id/status"
-            android:text="로그아웃됨"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:text="@string/google_title_text"
+            android:textSize="36sp"/>
 
         <TextView
             android:id="@+id/detail"
@@ -34,11 +29,41 @@
 
     </LinearLayout>
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="16dp">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/sync_data"
+            android:maxHeight="200dp"
+            android:layout_margin="16dp"
+            android:adjustViewBounds="true" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Google 계정에 로그인하여\n캘린더 데이터를 계정에 동기화하고,\n다른 기기에서도 쉽게 복원할 수 있습니다."
+            android:textSize="20sp"
+            android:layout_marginBottom="16dp" />
+        <TextView
+            android:id="@+id/status"
+            android:text="현재 로그아웃된 상태입니다.\nGoogle 계정에 로그인하세요."
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="20sp" />
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="3">
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/signInButton"

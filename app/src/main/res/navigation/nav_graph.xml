@@ -13,7 +13,11 @@
     <fragment
         android:id="@+id/PreferencesFragment"
         android:name="xyz.bcfriends.dra.PreferencesFragment"
-        android:label="설정" />
+        android:label="설정" >
+        <action
+            android:id="@+id/action_PreferencesFragment_to_alarmPreferencesFragment"
+            app:destination="@id/alarmPreferencesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/analyticsFragment"
         android:name="xyz.bcfriends.dra.AnalyticsFragment"
@@ -22,4 +26,8 @@
         android:id="@+id/excelFragment"
         android:name="xyz.bcfriends.dra.ExportExcelFragment"
         android:label="엑셀 내보내기" />
+    <fragment
+        android:id="@+id/alarmPreferencesFragment"
+        android:name="xyz.bcfriends.dra.AlarmPreferencesFragment"
+        android:label="면담 일정 알림" />
 </navigation>

@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="이날의 상태"
+            android:text="이 날의 상태"
             android:textColor="#FFF"
             android:textSize="20sp" />
 
@@ -35,11 +35,12 @@
             android:padding="20dp">
 
             <RadioGroup
-                android:id="@+id/fellingRadioGroup"
+                android:id="@+id/feelingRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <RadioButton
+                    android:id="@+id/feelingRadioBad"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -49,6 +50,7 @@
                     android:translationX="35dp"
                     android:translationY="8dp"/>
                 <RadioButton
+                    android:id="@+id/feelingRadioSad"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -58,6 +60,7 @@
                     android:translationX="35dp"
                     android:translationY="8dp" />
                 <RadioButton
+                    android:id="@+id/feelingRadioNormal"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -67,6 +70,7 @@
                     android:translationX="35dp"
                     android:translationY="8dp" />
                 <RadioButton
+                    android:id="@+id/feelingRadioGood"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -76,6 +80,7 @@
                     android:translationX="35dp"
                     android:translationY="8dp" />
                 <RadioButton
+                    android:id="@+id/feelingRadioNice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -86,12 +91,66 @@
                     android:translationY="8dp" />
             </RadioGroup>
         </LinearLayout>
-        <Button
-            android:id="@+id/bsInsertBtn"
-            android:layout_width="wrap_content"
+
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="메모"
+            android:layout_marginTop="8dp"
+            android:textColor="#FFF"
+            android:textSize="20sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
             android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:text="등록" />
+            android:background="#4A4A4A"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/memo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColorHint="#dddddd"
+                android:textColor="#ffffff"
+                android:background="@android:color/transparent"
+                android:hint="메모 입력 ..."
+                android:layout_margin="10dp"
+                />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="visible">
+            <Button
+                android:id="@+id/bsInsertBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:text="등록" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+            <Button
+                android:id="@+id/bsEditBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:text="수정" />
+            <Button
+                android:id="@+id/bsDeleteBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:text="삭제" />
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

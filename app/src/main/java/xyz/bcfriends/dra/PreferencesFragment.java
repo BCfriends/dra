@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -17,7 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import xyz.bcfriends.dra.util.AlarmPresenter;
+import xyz.bcfriends.dra.util.Alarm;
 import xyz.bcfriends.dra.util.DBHelper;
 
 import java.text.SimpleDateFormat;
@@ -41,9 +42,9 @@ public class PreferencesFragment extends PreferenceFragmentCompat implements DBH
     public boolean onPreferenceTreeClick(Preference preference) {
         super.onPreferenceTreeClick(preference);
         final Intent alarmIntent = new Intent(requireActivity(), DailyAlarmReceiver.class);
-        final PendingIntent pendingIntent = PendingIntent.getBroadcast(requireActivity(), 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        final PendingIntent pendingIntent = PendingIntent.getBroadcast(requireActivity(), Alarm.DEFAULT_CHANNEL, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        final AlarmPresenter presenter = new AlarmPresenter(requireActivity(), prefs, pendingIntent);
+        final Alarm.Presenter presenter = new AlarmPresenter(requireActivity(), prefs, pendingIntent);
 
         switch (preference.getKey()) {
             case "google_login":
@@ -77,12 +78,16 @@ public class PreferencesFragment extends PreferenceFragmentCompat implements DBH
 
                 dialog.show();
                 break;
+            case "alarm_manual_prefs":
+                Navigation.findNavController(requireView()).navigate(R.id.action_PreferencesFragment_to_alarmPreferencesFragment);
+                break;
             case "app_info":
-                AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-                builder.setTitle("앱 정보").setMessage("Dra v" + BuildConfig.VERSION_NAME);
-                builder.setPositiveButton("OK", null);
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                new AlertDialog.Builder(requireActivity())
+                        .setTitle("앱 정보")
+                        .setMessage("Dra v" + BuildConfig.VERSION_NAME)
+                        .setPositiveButton("OK", null)
+                        .create()
+                        .show();
                 break;
             case "db_test":
                 try {
@@ -108,11 +113,12 @@ public class PreferencesFragment extends PreferenceFragmentCompat implements DBH
 
                         String msg = getString(R.string.msg_token_fmt, token);
                         Log.d(TAG, msg);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-                        builder.setTitle("InstanceID").setMessage(token);
-                        builder.setPositiveButton("OK", null);
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
+                        new AlertDialog.Builder(requireActivity())
+                                .setTitle("InstanceID")
+                                .setMessage(token)
+                                .setPositiveButton("OK", null)
+                                .create()
+                                .show();
                     }
                 });
                 break;
