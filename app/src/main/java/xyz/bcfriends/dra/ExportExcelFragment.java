@@ -68,7 +68,6 @@ public class ExportExcelFragment extends Fragment implements DBHelper.Executor {
             String safeStatName = WorkbookUtil.createSafeSheetName("통계");
             String safeGraphName = WorkbookUtil.createSafeSheetName("그래프");
             CreationHelper createHelper = wb.getCreationHelper();
-            FirestoreHelper firestoreHelper = new FirestoreHelper(this);
 
             Sheet statSheet = wb.createSheet(safeStatName);
             Sheet graphSheet = wb.createSheet(safeGraphName);
@@ -104,80 +103,87 @@ public class ExportExcelFragment extends Fragment implements DBHelper.Executor {
                 }
             }
 
-            firestoreHelper.readDataAll(
-                    firestoreHelper.getDatabase().collection("users")
-                            .document(Objects.requireNonNull(firestoreHelper.getUser().getUid()))
-                            .collection("Records"),
-                    new DBHelper.QueryCallback() {
-                        @Override
-                        public void onCallback(@Nullable QuerySnapshot data) {
-                            boolean isNoteExist = true;
-                            if (data != null) {
-                                for (QueryDocumentSnapshot document : data) {
-                                    Row row = statSheet.createRow(statSheet.getLastRowNum() + 1);
+            try {
+                FirestoreHelper firestoreHelper = new FirestoreHelper(this);
 
-                                    Cell cell = row.createCell(0);
-                                    cell.setCellValue(statSheet.getLastRowNum());
+                firestoreHelper.readDataAll(
+                        firestoreHelper.getDatabase().collection("users")
+                                .document(Objects.requireNonNull(firestoreHelper.getUser().getUid()))
+                                .collection("Records"),
+                        new DBHelper.QueryCallback() {
+                            @Override
+                            public void onCallback(@Nullable QuerySnapshot data) {
+                                boolean isNoteExist = true;
+                                if (data != null) {
+                                    for (QueryDocumentSnapshot document : data) {
+                                        Row row = statSheet.createRow(statSheet.getLastRowNum() + 1);
 
-                                    // Date
-                                    cell = row.createCell(1);
-                                    cell.setCellValue(LocalDate.parse(document.getId()));
-                                    CellStyle cellStyle = wb.createCellStyle();
-                                    cellStyle.setDataFormat(
-                                            createHelper.createDataFormat().getFormat("yyyy-mm-dd"));
-                                    cell.setCellStyle(cellStyle);
+                                        Cell cell = row.createCell(0);
+                                        cell.setCellValue(statSheet.getLastRowNum());
 
-                                    // DepressStatus
-                                    cell = row.createCell(2);
-                                    cell.setCellValue(Integer.parseInt(Objects.requireNonNull(document.getData().get("depressStatus")).toString()));
+                                        // Date
+                                        cell = row.createCell(1);
+                                        cell.setCellValue(LocalDate.parse(document.getId()));
+                                        CellStyle cellStyle = wb.createCellStyle();
+                                        cellStyle.setDataFormat(
+                                                createHelper.createDataFormat().getFormat("yyyy-mm-dd"));
+                                        cell.setCellStyle(cellStyle);
 
-                                    // Note
-                                    if (noteFlag) {
-                                        if (document.getData().get("note") != null) {
-                                            cell = row.createCell(3);
-                                            cell.setCellValue(document.getData().get("note").toString());
+                                        // DepressStatus
+                                        cell = row.createCell(2);
+                                        cell.setCellValue(Integer.parseInt(Objects.requireNonNull(document.getData().get("depressStatus")).toString()));
+
+                                        // Note
+                                        if (noteFlag) {
+                                            if (document.getData().get("note") != null) {
+                                                cell = row.createCell(3);
+                                                cell.setCellValue(document.getData().get("note").toString());
+                                            }
                                         }
                                     }
+
+                                } else {
+                                    isNoteExist = false;
                                 }
 
-                            } else {
-                                isNoteExist = false;
-                            }
+                                for (int i = 0; i < statSheet.getLastRowNum(); i++) {
+                                    statSheet.setColumnWidth(1, (statSheet.getColumnWidth(i)) + 1024);
+                                }
 
-                            for (int i = 0; i < statSheet.getLastRowNum(); i++) {
-                                statSheet.setColumnWidth(1, (statSheet.getColumnWidth(i)) + 1024);
-                            }
+                                statSheet.setAutoFilter(CellRangeAddress.valueOf("B:C"));
 
-                            statSheet.setAutoFilter(CellRangeAddress.valueOf("B:C"));
+                                File file = new File(Environment.getExternalStorageDirectory(), safeStatName + ".xlsx");
 
-                            File file = new File(Environment.getExternalStorageDirectory(), safeStatName + ".xlsx");
+                                if (isNoteExist) {
+                                    try {
+                                        OutputStream fileO = new FileOutputStream(file);
+                                        wb.write(fileO);
 
-                            if (isNoteExist) {
-                                try {
-                                    OutputStream fileO = new FileOutputStream(file);
-                                    wb.write(fileO);
+                                        EditText exportEmail = v.findViewById(R.id.export_email);
+                                        String emailRegEx = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+                                        boolean emailValid = exportEmail.getText().toString().toLowerCase().matches(emailRegEx);
 
-                                    EditText exportEmail = v.findViewById(R.id.export_email);
-                                    String emailRegEx = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
-                                    boolean emailValid = exportEmail.getText().toString().toLowerCase().matches(emailRegEx);
-
-                                    if (emailValid) {
-                                        Uri uri = Uri.parse("mailto:" + exportEmail.getText());
-                                        Uri path = Uri.fromFile(file);
-                                        Intent it = new Intent(Intent.ACTION_SENDTO, uri);
-                                        it.putExtra(Intent.EXTRA_SUBJECT, "excel file email test");
-                                        it.putExtra(Intent.EXTRA_STREAM, path);
-                                        startActivityForResult(it, 200);
-                                    } else {
-                                        Toast.makeText(requireContext().getApplicationContext(), "이메일을 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
+                                        if (emailValid) {
+                                            Uri uri = Uri.parse("mailto:" + exportEmail.getText());
+                                            Uri path = Uri.fromFile(file);
+                                            Intent it = new Intent(Intent.ACTION_SENDTO, uri);
+                                            it.putExtra(Intent.EXTRA_SUBJECT, "excel file email test");
+                                            it.putExtra(Intent.EXTRA_STREAM, path);
+                                            startActivityForResult(it, 200);
+                                        } else {
+                                            Toast.makeText(requireContext().getApplicationContext(), "이메일을 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
                                 }
+                                Toast.makeText(requireContext().getApplicationContext(), file.toString(), Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(requireContext().getApplicationContext(), file.toString(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                        });
+            } catch (UnsupportedOperationException ignored) {
+
+            }
+
 /*
             try {
 //            xls = File.createTempFile("통계", ".xlsx", requireActivity().getExternalCacheDir());
