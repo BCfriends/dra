@@ -24,6 +24,7 @@
 
     <string name="menu_stat">통계</string>
     <string name="menu_share">공유하기</string>
+    <string name="menu_export">내보내기</string>
     <string name="more">더보기</string>
     <string name="content_description_more">더보기</string>
 
@@ -70,4 +71,9 @@
     <string name="google_title_text">Google Sign In</string>
 
     <string name="msg_token_fmt" translatable="false">InstanceID Token: %s</string>
+    <string name="hint_email">example@gmail.com</string>
+    <string name="hint_kakao">KakaoTalk ID</string>
+    <string name="export_excel_guide">엑셀 파일을 전송할 곳을 체크해주세요.</string>
+    <string name="export_memo">메모</string>
+    <string name="export_graph">그래프</string>
 </resources>

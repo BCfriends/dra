@@ -23,9 +23,9 @@
         android:name="xyz.bcfriends.dra.AnalyticsFragment"
         android:label="AnalyticsFragment" />
     <fragment
-        android:id="@+id/shareFragment"
-        android:name="xyz.bcfriends.dra.ShareFragment"
-        android:label="ShareFragment" />
+        android:id="@+id/excelFragment"
+        android:name="xyz.bcfriends.dra.ExportExcelFragment"
+        android:label="엑셀 내보내기" />
     <fragment
         android:id="@+id/alarmPreferencesFragment"
         android:name="xyz.bcfriends.dra.AlarmPreferencesFragment"

@@ -11,7 +11,8 @@ public class DepressStatus {
     public static final String NICE = "5";
 
     public static int getDepressDrawObj(int depressStatus) {
-        return getDepressDrawObj(String.valueOf(depressStatus));
+        int result = getDepressDrawObj(String.valueOf(depressStatus));
+        return result;
     }
 
     public static int getDepressDrawObj(String depressStatus) {
