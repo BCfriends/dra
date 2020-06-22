@@ -77,6 +77,9 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements DBHe
                                 break;
                             case DepressStatus.NICE:
                                 rg.check(R.id.feelingRadioNice);
+                                break;
+                            default:
+
                         }
                         String memo = (String) data.get("memo");
                         EditText ed = view.findViewById(R.id.memo);
@@ -84,7 +87,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment implements DBHe
                     }
                 }
             });
-        } catch (UnsupportedOperationException e) {
+        } catch (UnsupportedOperationException ignored) {
 
         }
 

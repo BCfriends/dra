@@ -237,8 +237,6 @@ public class GoogleSignInActivity extends AppCompatActivity implements
     }
 
     private void googleBtnUi() {
-        // TODO Auto-generated method stub
-
         SignInButton googleButton = (SignInButton) findViewById(R.id.signInButton);
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
