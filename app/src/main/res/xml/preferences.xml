@@ -36,9 +36,6 @@
             android:key="db_test"
             android:title="Test Data Insertion into Cloud Firestore" />
         <Preference
-            android:key="get_firebase_id"
-            android:title="Get Firebase Instance ID" />
-        <Preference
             android:key="debug"
             android:title="Start TestActivity" />
     </PreferenceCategory>

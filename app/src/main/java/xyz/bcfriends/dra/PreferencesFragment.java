@@ -6,18 +6,12 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import xyz.bcfriends.dra.util.Alarm;
 import xyz.bcfriends.dra.util.DBHelper;
 
@@ -99,28 +93,6 @@ public class PreferencesFragment extends PreferenceFragmentCompat implements DBH
                 } catch (UnsupportedOperationException ignored) {
 
                 }
-                break;
-            case "get_firebase_id":
-                FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "getInstanceId failed", task.getException());
-                            return;
-                        }
-
-                        String token = task.getResult().getToken();
-
-                        String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d(TAG, msg);
-                        new AlertDialog.Builder(requireActivity())
-                                .setTitle("InstanceID")
-                                .setMessage(token)
-                                .setPositiveButton("OK", null)
-                                .create()
-                                .show();
-                    }
-                });
                 break;
             case "debug":
                 intent = new Intent(requireActivity(), TestActivity.class);
